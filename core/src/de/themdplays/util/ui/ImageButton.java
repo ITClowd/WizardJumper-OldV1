@@ -18,6 +18,7 @@ public class ImageButton extends Actor {
     private EditorTools editorTool;
 
     public ImageButton(Sprite sprite, final EditorTools editorTool) {
+        Gdx.input.setInputProcessor(getStage());
         this.look = sprite;
         setWidth(Gdx.graphics.getHeight()*0.05f);
         setHeight(Gdx.graphics.getHeight()*0.05f);

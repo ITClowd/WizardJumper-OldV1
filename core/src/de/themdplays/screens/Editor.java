@@ -2,7 +2,6 @@ package de.themdplays.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -18,7 +17,7 @@ import de.themdplays.util.ui.EditorTools;
 /**
  * Created by Moritz on 30.12.2016.
  */
-public class Editor implements Screen, InputProcessor {
+public class Editor implements Screen {
 
     private SpriteBatch batch;
 
@@ -27,11 +26,17 @@ public class Editor implements Screen, InputProcessor {
     private static EditorTools tool;
     private static Tile currentTile;
 
+    private static boolean changedTool = false;
+
     //RENDER
     private EditorUIRenderer editorUIRenderer;
     private LevelRenderer levelRenderer;
 
     private Location maplocation;
+
+
+    private boolean down = false;
+    private int middleX, middleY;
 
     @Override
     public void show() {
@@ -45,9 +50,9 @@ public class Editor implements Screen, InputProcessor {
         currentTile = Tile.DIRT;
 
         //INTI RENDER
-        editorUIRenderer = new EditorUIRenderer(this);
         levelRenderer = new LevelRenderer();
-        Gdx.input.setInputProcessor(this);
+        editorUIRenderer = new EditorUIRenderer();
+
     }
 
     @Override
@@ -56,24 +61,48 @@ public class Editor implements Screen, InputProcessor {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         //WORLD RENDERER
-        levelRenderer.render(batch, map);
         //UI RENDERING
+        levelRenderer.render(batch, map);
         editorUIRenderer.render();
 
+
+        if(Gdx.input.isButtonPressed(Input.Buttons.MIDDLE)&&!down) {
+            middleX = Gdx.input.getX()-(int)levelRenderer.getMapLoc().getX();
+            middleY = Gdx.graphics.getHeight()-Gdx.input.getY()-(int)levelRenderer.getMapLoc().getY();
+
+            down = true;
+        } else if(Gdx.input.isButtonPressed(Input.Buttons.MIDDLE)&&down) {
+            levelRenderer.setMapLoc(new Location(Gdx.input.getX()-middleX, Gdx.graphics.getHeight()-Gdx.input.getY()-middleY));
+        } else if(!Gdx.input.isButtonPressed(Input.Buttons.MIDDLE)) {
+            down=false;
+        }
+
         batch.end();
+
+        //TODO ADD BOUNDS TO PENCIL FUNCTION
         if(Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Gdx.input.getY()<=Gdx.graphics.getHeight()) {
             float tileSize = Constants.TILE_SIZE*levelRenderer.getZoom();
             switch(tool) {
                 case PENCIL:
                     Cell[] [] tmp = map.getCells();
-                    tmp[(Gdx.graphics.getHeight()-Gdx.input.getY())/(int)tileSize]
-                            [Gdx.input.getX()/(int)tileSize] = new Cell(currentTile);
+                    tmp[(Gdx.graphics.getHeight()-Gdx.input.getY()-(int)levelRenderer.getMapLoc().getY())/(int)tileSize]
+                            [(Gdx.input.getX()-(int)levelRenderer.getMapLoc().getX())/(int)tileSize] = new Cell(currentTile);
                     map.setCells(tmp);
                     break;
             }
         }
     }
 
+    public static void setTool(EditorTools tool) {
+        Editor.tool = tool;
+        Gdx.app.log("INFO", "Current Tool " + tool.name());
+    }
+
+    public static EditorTools getCurrentTool() {
+        return tool;
+    }
+
+    //region Unnecessary Override stuff
     @Override
     public void resize(int width, int height) {
 
@@ -97,56 +126,6 @@ public class Editor implements Screen, InputProcessor {
     @Override
     public void dispose() {
     }
-
-    public static void setTool(EditorTools tool) {
-        Editor.tool = tool;
-        Gdx.app.log("INFO", "Current Tool " + tool.name());
-    }
-
-    public static EditorTools getCurrentTool() {
-        return tool;
-    }
-
-    //region Unneccessary
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return false;
-    }
-
-    @Override
-    public boolean keyDown(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyUp(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return false;
-    }
     //endregion
 
-    @Override
-    public boolean scrolled(int amount) {
-        levelRenderer.setZoom(levelRenderer.getZoom() + -amount * 0.2f);
-        return false;
-    }
 }

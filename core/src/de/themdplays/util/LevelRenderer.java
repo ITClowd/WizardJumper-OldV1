@@ -14,8 +14,12 @@ public class LevelRenderer {
 
     private float zoom;
 
+    private Location mapLoc;
+
     public LevelRenderer() {
         this.zoom = 2;
+
+        this.mapLoc = new Location(0,0);
     }
 
     /**
@@ -23,6 +27,7 @@ public class LevelRenderer {
      * @param batch
      */
     public void render(SpriteBatch batch, WizardJumperMap wjm) {
+
         float tileSize = Constants.TILE_SIZE*zoom; //for better performance here not in draw
         Texture emptytexture = new Texture(new Pixmap((int)tileSize, (int)tileSize, Pixmap.Format.Alpha));
 
@@ -31,7 +36,7 @@ public class LevelRenderer {
                 if(wjm.getCells()[y][x] != null) {
                     int id = wjm.getCells()[y][x].getTile().getID();
                     if(id != 0)
-                        batch.draw(WizardJumper.assetsHandler.getBlocks().get(id).createSprites().first(), x*tileSize, y*tileSize, tileSize, tileSize);
+                        batch.draw(WizardJumper.assetsHandler.getBlocks().get(id).createSprites().first(), x*tileSize+mapLoc.getX(), y*tileSize+mapLoc.getY(), tileSize, tileSize);
                     else batch.draw(emptytexture, x*tileSize, y*tileSize, tileSize, tileSize);
                 } else {
                     Gdx.app.log("LevelDraw", "Cells null");
@@ -49,5 +54,13 @@ public class LevelRenderer {
 
     public float getZoom() {
         return zoom;
+    }
+
+    public void setMapLoc(Location mapLoc) {
+        this.mapLoc = mapLoc;
+    }
+
+    public Location getMapLoc() {
+        return mapLoc;
     }
 }

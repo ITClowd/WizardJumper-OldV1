@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import de.themdplays.main.WizardJumper;
-import de.themdplays.screens.Editor;
 import de.themdplays.util.ui.EditorTools;
 import de.themdplays.util.ui.ImageButton;
 
@@ -19,13 +18,13 @@ public class EditorUIRenderer {
     private ImageButton eraser, fill, pencil, save;
     private Table table;
 
-    public EditorUIRenderer(Editor editor) {
+    public EditorUIRenderer() {
         stage = new Stage();
         table = new Table();
         table.setPosition(Gdx.graphics.getHeight()*0.04f, Gdx.graphics.getHeight()*0.5f);
         stage.addActor(table);
         initButtons();
-        Gdx.input.setInputProcessor(editor);
+        Gdx.input.setInputProcessor(stage);
     }
 
     public void render() {
