@@ -65,7 +65,6 @@ public class Editor implements Screen {
         levelRenderer.render(batch, map);
         editorUIRenderer.render();
 
-
         if(Gdx.input.isButtonPressed(Input.Buttons.MIDDLE)&&!down) {
             middleX = Gdx.input.getX()-(int)levelRenderer.getMapLoc().getX();
             middleY = Gdx.graphics.getHeight()-Gdx.input.getY()-(int)levelRenderer.getMapLoc().getY();
@@ -79,9 +78,13 @@ public class Editor implements Screen {
 
         batch.end();
 
-        //TODO ADD BOUNDS TO PENCIL FUNCTION
-        if(Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Gdx.input.getY()<=Gdx.graphics.getHeight()) {
-            float tileSize = Constants.TILE_SIZE*levelRenderer.getZoom();
+        float tileSize = Constants.TILE_SIZE*levelRenderer.getZoom();
+        if(Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Gdx.input.getY()<=Gdx.graphics.getHeight()&&
+        //BOUNDS
+                ((Gdx.graphics.getHeight()-Gdx.input.getY()-(int)levelRenderer.getMapLoc().getY())/(int)tileSize)>=0&&
+                ((Gdx.graphics.getHeight()-Gdx.input.getY()-(int)levelRenderer.getMapLoc().getY())/(int)tileSize)<map.getHeight()&&
+                ((Gdx.input.getX()-(int)levelRenderer.getMapLoc().getX())/(int)tileSize>=0)&&
+                ((Gdx.input.getX()-(int)levelRenderer.getMapLoc().getX())/(int)tileSize)<map.getWidth()) {
             switch(tool) {
                 case PENCIL:
                     Cell[] [] tmp = map.getCells();
@@ -92,6 +95,8 @@ public class Editor implements Screen {
             }
         }
     }
+
+
 
     public static void setTool(EditorTools tool) {
         Editor.tool = tool;
