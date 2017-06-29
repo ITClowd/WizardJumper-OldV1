@@ -4,8 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import de.themdplays.main.WizardJumper;
+import de.themdplays.map.Tile;
+import de.themdplays.util.ui.BlockButton;
 import de.themdplays.util.ui.EditorTools;
-import de.themdplays.util.ui.ImageButton;
+import de.themdplays.util.ui.ToolButton;
 
 /**
  * Created by Moritz on 30.12.2016.
@@ -15,15 +17,24 @@ public class EditorUIRenderer {
 
     private Stage stage;
 
-    private ImageButton eraser, fill, pencil, save;
-    private Table table;
+    private ToolButton eraser, fill, pencil, save;
+    private Table buttons, chooser;
 
     public EditorUIRenderer() {
         stage = new Stage();
-        table = new Table();
-        table.setPosition(Gdx.graphics.getHeight()*0.04f, Gdx.graphics.getHeight()*0.5f);
-        stage.addActor(table);
+
+        //INIT TABLE
+        buttons = new Table();
+        buttons.setPosition(Gdx.graphics.getHeight()*0.04f, Gdx.graphics.getHeight()*0.5f);
+
+        chooser = new Table();
+        chooser.setPosition(Gdx.graphics.getWidth()*0.5f, Gdx.graphics.getWidth()*0.04f);
+
+
+        stage.addActor(buttons);
+        stage.addActor(chooser);
         initButtons();
+        initChooser();
         Gdx.input.setInputProcessor(stage);
     }
 
@@ -33,23 +44,26 @@ public class EditorUIRenderer {
     }
 
     private void initButtons() {
-        eraser = new ImageButton(WizardJumper.assetsHandler.getA_editor_UI().createSprite("Eraser"), EditorTools.ERASER);
-        fill = new ImageButton(WizardJumper.assetsHandler.getA_editor_UI().createSprite("Fill"), EditorTools.FILL);
-        pencil = new ImageButton(WizardJumper.assetsHandler.getA_editor_UI().createSprite("Pencil"), EditorTools.PENCIL);
-        save = new ImageButton(WizardJumper.assetsHandler.getA_editor_UI().createSprite("Save"), EditorTools.SAVE);
+        eraser = new ToolButton(WizardJumper.assetsHandler.getA_editor_UI().createSprite("Eraser"), EditorTools.ERASER);
+        fill = new ToolButton(WizardJumper.assetsHandler.getA_editor_UI().createSprite("Fill"), EditorTools.FILL);
+        pencil = new ToolButton(WizardJumper.assetsHandler.getA_editor_UI().createSprite("Pencil"), EditorTools.PENCIL);
+        save = new ToolButton(WizardJumper.assetsHandler.getA_editor_UI().createSprite("Save"), EditorTools.SAVE);
 
-        table.add(pencil).spaceBottom(eraser.getHeight()+eraser.getHeight()*0.1f);
-        table.row();
-        table.add(fill).spaceBottom(eraser.getHeight()+eraser.getHeight()*0.1f);
-        table.row();
-        table.add(eraser).spaceBottom(eraser.getHeight()+eraser.getHeight()*0.1f);
-        table.row();
-        table.add(save).spaceBottom(eraser.getHeight()+eraser.getHeight()*0.1f);
+        //BUTTONS
+        buttons.add(pencil).spaceBottom(eraser.getHeight()+eraser.getHeight()*0.1f);
+        buttons.row();
+        buttons.add(fill).spaceBottom(eraser.getHeight()+eraser.getHeight()*0.1f);
+        buttons.row();
+        buttons.add(eraser).spaceBottom(eraser.getHeight()+eraser.getHeight()*0.1f);
+        buttons.row();
+        buttons.add(save).spaceBottom(eraser.getHeight()+eraser.getHeight()*0.1f);
 
     }
 
     private void initChooser() {
-
+        for(Tile tile : Tile.values()) {
+            if(tile.getID() != 0) chooser.add(new BlockButton(WizardJumper.assetsHandler.getBlocks().get(tile.getID()).createSprites().first(), tile)).space(0, eraser.getHeight()*0.1f, 0, eraser.getHeight()*0.1f);
+        }
     }
 
 }

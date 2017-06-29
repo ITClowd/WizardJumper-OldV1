@@ -107,6 +107,14 @@ public class Editor implements Screen {
         return tool;
     }
 
+    public static void setCurrentTile(Tile currentTile) {
+        Editor.currentTile = currentTile;
+    }
+
+    public static Tile getCurrentTile() {
+        return currentTile;
+    }
+
     //region Unnecessary Override stuff
     @Override
     public void resize(int width, int height) {

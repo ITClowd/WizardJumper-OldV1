@@ -28,7 +28,7 @@ public class LevelRenderer {
      */
     public void render(SpriteBatch batch, WizardJumperMap wjm) {
 
-        float tileSize = Constants.TILE_SIZE*zoom; //for better performance here not in draw
+        float tileSize = Constants.TILE_SIZE*zoom;
         Pixmap m = new Pixmap((int)tileSize, (int)tileSize, Pixmap.Format.Alpha);
 
 //        Pixmap m = new Pixmap((int)tileSize, (int)tileSize, Pixmap.Format.RGB888);
@@ -53,7 +53,6 @@ public class LevelRenderer {
     public void setZoom(float zoom) {
         if(zoom<1) this.zoom=1;
         //TODO ADD ZOOM LIMIT
-//        else if(Constants.TILE_SIZE*zoom>Gdx.graphics.getWidth()/(Constants.TILES_PER_WIDTH*Constants.TILE_SIZE)) this.zoom = (Gdx.graphics.getWidth()/(Constants.TILES_PER_WIDTH*Constants.TILE_SIZE))/Constants.TILE_SIZE;
         else this.zoom = zoom;
     }
 
