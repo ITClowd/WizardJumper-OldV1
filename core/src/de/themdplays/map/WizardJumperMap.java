@@ -1,6 +1,7 @@
 package de.themdplays.map;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 
 import java.util.Arrays;
 
@@ -23,6 +24,11 @@ public class WizardJumperMap {
         this.height = height;
     }
 
+    public WizardJumperMap(FileHandle fileHandle) {
+        compressedMap = fileHandle.readString();
+        uncompress();
+    }
+
     /**
      * Compresses the map to an short string
      */
@@ -42,9 +48,10 @@ public class WizardJumperMap {
         String[] array = compressedMap.split(";");
         this.width=Integer.parseInt(array[0]);
         this.height=Integer.parseInt(array[1]);
+        cells = new Cell[height][width];
         for(int x = 0; x<height; x++) {
             for(int y = 0; y<width; y++) {
-                cells[y][x] = new Cell(Tile.getNameByCode(Integer.parseInt(array[(y+2)*(x+2)])));
+                cells[y][x] = new Cell(Tile.getNameByCode(Integer.parseInt(array[(y*x)+2])));
             }
         }
     }

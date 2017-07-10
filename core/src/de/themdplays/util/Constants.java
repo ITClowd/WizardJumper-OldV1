@@ -7,7 +7,7 @@ public class Constants {
 	public static final int VIEWPORT_WIDTH = 1024;
 	static final int VIEWPORT_HEIGHT = 1024*Gdx.graphics.getHeight()/Gdx.graphics.getWidth();
 
-    public static final int FONT_SIZE_BIG= Gdx.graphics.getHeight()/40;
+    public static final int FONT_SIZE_BIG= Gdx.graphics.getHeight()/30;
     public static final int FONT_SIZE_SMALL = Gdx.graphics.getHeight()/70;
 
     public static final int TILE_SIZE = 16;

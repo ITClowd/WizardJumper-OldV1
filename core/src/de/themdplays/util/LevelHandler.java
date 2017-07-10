@@ -2,8 +2,7 @@ package de.themdplays.util;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import de.themdplays.map.WizardJumperMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,11 +12,11 @@ import java.util.List;
  */
 public class LevelHandler {
 
-    private List<TiledMap> userMaps, gameMaps;
+    private List<WizardJumperMap> userMaps, gameMaps;
 
     public LevelHandler() {
-        userMaps = new ArrayList<TiledMap>();
-        gameMaps = new ArrayList<TiledMap>();
+        userMaps = new ArrayList<WizardJumperMap>();
+        gameMaps = new ArrayList<WizardJumperMap>();
         loadGameLevels();
         loadUserMaps();
     }
@@ -28,8 +27,10 @@ public class LevelHandler {
     private void loadGameLevels() {
         Gdx.app.log("INFO", "Loading Game Levels");
         for(FileHandle f : Gdx.files.local("levels").list()) {
-            if(f.extension().equalsIgnoreCase("tmx")) gameMaps.add(new TmxMapLoader().load(f.path()));
-            Gdx.app.log("Loaded", f.nameWithoutExtension());
+            if(f.extension().equalsIgnoreCase("wjm")) {
+                gameMaps.add(new WizardJumperMap(f));
+                Gdx.app.log("Loaded", f.nameWithoutExtension());
+            }
         }
         Gdx.app.log("INFO", "Finished Loading Game Levels");
     }
@@ -40,9 +41,11 @@ public class LevelHandler {
      */
     private void loadUserMaps() {
         Gdx.app.log("INFO", "Loading User Levels");
-        for(FileHandle f : Gdx.files.local("levels").list()) {
-            if(f.extension().equalsIgnoreCase("wjm")) userMaps.add(new TmxMapLoader().load(f.path()));
-            Gdx.app.log("Loaded", f.nameWithoutExtension());
+        for(FileHandle f : Gdx.files.local("maps").list()) {
+            if(f.extension().equalsIgnoreCase("wjm")) {
+                gameMaps.add(new WizardJumperMap(f));
+                Gdx.app.log("Loaded", f.nameWithoutExtension());
+            }
         }
         Gdx.app.log("INFO", "Finished Loading User Levels");
     }

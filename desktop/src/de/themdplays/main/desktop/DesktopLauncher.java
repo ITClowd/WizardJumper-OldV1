@@ -18,7 +18,7 @@ public class DesktopLauncher {
         cfg.addIcon("icon/icon_32x32.png", FileType.Internal);
         cfg.addIcon("icon/icon_128x128.png", FileType.Internal);
         cfg.addIcon("icon/icon_16x16.png", FileType.Internal);
-//
+
 //        System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
 //        cfg.width = LwjglApplicationConfiguration.getDesktopDisplayMode().width;
 //        cfg.height = LwjglApplicationConfiguration.getDesktopDisplayMode().height;
@@ -34,7 +34,7 @@ public class DesktopLauncher {
 			s.paddingX = 2;
 			s.paddingY = 2;
 		
-			TexturePacker.process("D://Programmieren//Spiele//Graphics//Blocks//Packer", "D://Programmieren//Spiele//WizardJumper//core//assets//", "Stone");
+			TexturePacker.process("D://Programmieren//Spiele//Graphics//ui//", "D://Programmieren//Spiele//WizardJumper//core//assets//ui//", "menu");
 		}
 
 		

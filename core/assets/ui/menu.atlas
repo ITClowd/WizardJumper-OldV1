@@ -1,41 +1,62 @@
 
 menu.png
-size: 256,64
+size: 512,64
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+blacktransparent
+  rotate: false
+  xy: 460, 61
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
 button0
   rotate: false
-  xy: 2, 36
+  xy: 184, 36
   size: 90, 26
   orig: 90, 26
   offset: 0, 0
   index: -1
 button1
   rotate: false
-  xy: 2, 8
+  xy: 276, 36
   size: 90, 26
   orig: 90, 26
   offset: 0, 0
   index: -1
 button2
   rotate: false
-  xy: 94, 36
+  xy: 368, 36
   size: 90, 26
   orig: 90, 26
   offset: 0, 0
   index: -1
 checkbox0
   rotate: false
-  xy: 94, 2
+  xy: 184, 2
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 checkbox1
   rotate: false
-  xy: 128, 2
+  xy: 218, 2
   size: 32, 32
   orig: 32, 32
+  offset: 0, 0
+  index: -1
+default.background
+  rotate: false
+  xy: 2, 7
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+textBox0
+  rotate: false
+  xy: 2, 10
+  size: 180, 52
+  orig: 180, 52
   offset: 0, 0
   index: -1

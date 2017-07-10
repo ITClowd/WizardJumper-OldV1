@@ -17,5 +17,11 @@
 	},
 	"com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle": {
 		"default": { "font": "white_small", "checkboxOn": "checkbox0", "checkboxOff": "checkbox1" }
-	}
+	},
+    "com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle": {
+        "default": { "titleFont": "white_big", "background": "default.background", "stageBackground": "blacktransparent" }
+    },
+    "com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle": {
+      "default": { "font": "white_big", "fontColor": "white", "background": "textBox0" }
+    }
 }

@@ -27,7 +27,7 @@ public class Editor implements Screen {
 
     private SpriteBatch batch;
 
-    private WizardJumperMap map;
+    private static WizardJumperMap map;
 
     private static EditorTools tool;
     private static Tile currentTile;
@@ -99,6 +99,7 @@ public class Editor implements Screen {
                 ((Gdx.input.getX()-(int)levelRenderer.getMapLoc().getX())/(int)tileSize)<map.getWidth()&&
                 Gdx.input.getX()>=editorUIRenderer.getButtons().getWidth()+editorUIRenderer.getButtons().getX()+Gdx.graphics.getWidth()*0.04f&&
                 Gdx.input.getY()<=Gdx.graphics.getHeight()-(editorUIRenderer.getChooser().getHeight()+editorUIRenderer.getChooser().getY()+Gdx.graphics.getWidth()*0.04f)) {
+
             switch(tool) {
                 case PENCIL:
                     Cell[] [] tmp = map.getCells();
@@ -167,6 +168,10 @@ public class Editor implements Screen {
         return map;
     }
 
+    public static void saveMap(String name) {
+        map.save(name);
+    }
+
 //    private Cell[][] fill(Cell[][] arr,int x, int y, Tile target)
 //    {
 //
@@ -200,5 +205,6 @@ public class Editor implements Screen {
     }
 
     //endregion
+
 
 }
