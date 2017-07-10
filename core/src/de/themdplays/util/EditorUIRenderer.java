@@ -1,10 +1,13 @@
 package de.themdplays.util;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import de.themdplays.main.WizardJumper;
 import de.themdplays.map.Tile;
+import de.themdplays.screens.Editor;
 import de.themdplays.util.ui.BlockButton;
 import de.themdplays.util.ui.EditorTools;
 import de.themdplays.util.ui.ToolButton;
@@ -19,6 +22,8 @@ public class EditorUIRenderer {
 
     private ToolButton eraser, fill, pencil, save;
     private Table buttons, chooser;
+
+    private Texture s_window;
 
     public EditorUIRenderer() {
         stage = new Stage();
@@ -36,11 +41,19 @@ public class EditorUIRenderer {
         initButtons();
         initChooser();
         Gdx.input.setInputProcessor(stage);
+        s_window = new Texture(Gdx.files.internal("ui/window.png"));
+
     }
 
-    public void render() {
+    public void render(SpriteBatch batch) {
         stage.act();
         stage.draw();
+
+        if(Editor.getCurrentTool() == EditorTools.SAVE) {
+//            batch.draw(s_window, Gdx.graphics.getWidth()*0.5f-s_window.getWidth()*0.5f, Gdx.graphics.getHeight()*0.5f-s_window.getHeight()*0.5f);
+            batch.draw(s_window, 0, Gdx.graphics.getHeight()*0.5f);
+        }
+
     }
 
     private void initButtons() {

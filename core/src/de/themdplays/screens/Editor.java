@@ -3,8 +3,11 @@ package de.themdplays.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.sun.scenario.effect.Flood;
 import de.themdplays.map.Cell;
 import de.themdplays.map.Tile;
 import de.themdplays.map.WizardJumperMap;
@@ -13,6 +16,9 @@ import de.themdplays.util.EditorUIRenderer;
 import de.themdplays.util.LevelRenderer;
 import de.themdplays.util.Location;
 import de.themdplays.util.ui.EditorTools;
+
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * Created by Moritz on 30.12.2016.
@@ -38,6 +44,8 @@ public class Editor implements Screen {
     private boolean down = false;
     private int middleX, middleY;
 
+    private Tile filltmp;
+
     @Override
     public void show() {
         batch = new SpriteBatch();
@@ -53,6 +61,8 @@ public class Editor implements Screen {
         levelRenderer = new LevelRenderer();
         editorUIRenderer = new EditorUIRenderer();
 
+
+
     }
 
     @Override
@@ -63,7 +73,7 @@ public class Editor implements Screen {
         //WORLD RENDERER
         //UI RENDERING
         levelRenderer.render(batch, map);
-        editorUIRenderer.render();
+        editorUIRenderer.render(batch);
 
         if(Gdx.input.isButtonPressed(Input.Buttons.MIDDLE)&&!down) {
             middleX = Gdx.input.getX()-(int)levelRenderer.getMapLoc().getX();
@@ -78,6 +88,7 @@ public class Editor implements Screen {
 
         batch.end();
 
+
         float tileSize = Constants.TILE_SIZE*levelRenderer.getZoom();
         if(Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Gdx.input.getY()<=Gdx.graphics.getHeight()&&
         //BOUNDS
@@ -91,6 +102,22 @@ public class Editor implements Screen {
                     tmp[(Gdx.graphics.getHeight()-Gdx.input.getY()-(int)levelRenderer.getMapLoc().getY())/(int)tileSize]
                             [(Gdx.input.getX()-(int)levelRenderer.getMapLoc().getX())/(int)tileSize] = new Cell(currentTile);
                     map.setCells(tmp);
+                    break;
+                case ERASER:
+                    Cell[] [] eraser_tmp = map.getCells();
+                    eraser_tmp[(Gdx.graphics.getHeight()-Gdx.input.getY()-(int)levelRenderer.getMapLoc().getY())/(int)tileSize]
+                            [(Gdx.input.getX()-(int)levelRenderer.getMapLoc().getX())/(int)tileSize] = new Cell(Tile.AIR);
+                    map.setCells(eraser_tmp);
+                    break;
+                case FILL:
+
+                    int x = (Gdx.input.getX()-(int)levelRenderer.getMapLoc().getX())/(int)tileSize;
+                    int y = (Gdx.graphics.getHeight()-Gdx.input.getY()-(int)levelRenderer.getMapLoc().getY())/(int)tileSize;
+
+
+                    Tile tile =   map.getCells()[y][x].getTile();
+                    filltmp = tile;
+                    map.setCells(floodFill(map.getCells(), x, y, tile));
                     break;
             }
         }
@@ -114,6 +141,35 @@ public class Editor implements Screen {
     public static Tile getCurrentTile() {
         return currentTile;
     }
+
+    private Cell[][] floodFill(Cell[][] map, int x, int y, final Tile clickedTile) {
+
+        float tileSize = Constants.TILE_SIZE*levelRenderer.getZoom();
+
+        if(x>=0&&x<this.map.getWidth()&&y>=0&&y<this.map.getHeight()) {
+
+
+
+            final Tile tile = clickedTile;
+
+
+            if (map[y][x].getTile() == filltmp && map[y][x].getTile() != currentTile) {
+                map[y][x] = new Cell(currentTile);
+                map = floodFill(map, x - 1, y, filltmp);
+                map = floodFill(map, x + 1, y, filltmp);
+                map = floodFill(map, x, y - 1, filltmp);
+                map = floodFill(map, x, y + 1, filltmp);
+            }
+        }
+        return map;
+    }
+
+//    private Cell[][] fill(Cell[][] arr,int x, int y, Tile target)
+//    {
+//
+//    }
+
+
 
     //region Unnecessary Override stuff
     @Override
@@ -139,6 +195,7 @@ public class Editor implements Screen {
     @Override
     public void dispose() {
     }
+
     //endregion
 
 }
