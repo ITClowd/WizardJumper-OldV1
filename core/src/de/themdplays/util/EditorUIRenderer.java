@@ -62,6 +62,8 @@ public class EditorUIRenderer {
         pencil = new ToolButton(WizardJumper.assetsHandler.getA_editor_UI().createSprite("Pencil"), EditorTools.PENCIL);
         save = new ToolButton(WizardJumper.assetsHandler.getA_editor_UI().createSprite("Save"), EditorTools.SAVE);
 
+        buttons.setWidth(eraser.getWidth());
+
         //BUTTONS
         buttons.add(pencil).spaceBottom(eraser.getHeight()+eraser.getHeight()*0.1f);
         buttons.row();
@@ -70,13 +72,20 @@ public class EditorUIRenderer {
         buttons.add(eraser).spaceBottom(eraser.getHeight()+eraser.getHeight()*0.1f);
         buttons.row();
         buttons.add(save).spaceBottom(eraser.getHeight()+eraser.getHeight()*0.1f);
-
     }
 
     private void initChooser() {
+        chooser.setHeight(eraser.getHeight());
         for(Tile tile : Tile.values()) {
             if(tile.getID() != 0) chooser.add(new BlockButton(WizardJumper.assetsHandler.getBlocks().get(tile.getID()).createSprites().first(), tile)).space(0, eraser.getHeight()*0.1f, 0, eraser.getHeight()*0.1f);
         }
     }
 
+    public Table getButtons() {
+        return buttons;
+    }
+
+    public Table getChooser() {
+        return chooser;
+    }
 }

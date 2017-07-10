@@ -90,12 +90,15 @@ public class Editor implements Screen {
 
 
         float tileSize = Constants.TILE_SIZE*levelRenderer.getZoom();
+
         if(Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Gdx.input.getY()<=Gdx.graphics.getHeight()&&
         //BOUNDS
                 ((Gdx.graphics.getHeight()-Gdx.input.getY()-(int)levelRenderer.getMapLoc().getY())/(int)tileSize)>=0&&
                 ((Gdx.graphics.getHeight()-Gdx.input.getY()-(int)levelRenderer.getMapLoc().getY())/(int)tileSize)<map.getHeight()&&
                 ((Gdx.input.getX()-(int)levelRenderer.getMapLoc().getX())/(int)tileSize>=0)&&
-                ((Gdx.input.getX()-(int)levelRenderer.getMapLoc().getX())/(int)tileSize)<map.getWidth()) {
+                ((Gdx.input.getX()-(int)levelRenderer.getMapLoc().getX())/(int)tileSize)<map.getWidth()&&
+                Gdx.input.getX()>=editorUIRenderer.getButtons().getWidth()+editorUIRenderer.getButtons().getX()+Gdx.graphics.getWidth()*0.04f&&
+                Gdx.input.getY()<=Gdx.graphics.getHeight()-(editorUIRenderer.getChooser().getHeight()+editorUIRenderer.getChooser().getY()+Gdx.graphics.getWidth()*0.04f)) {
             switch(tool) {
                 case PENCIL:
                     Cell[] [] tmp = map.getCells();
