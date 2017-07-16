@@ -14,11 +14,7 @@ public class ImageButton extends Actor {
 
     public ImageButton(Sprite sprite) {
         this.look = sprite;
-
         Gdx.input.setInputProcessor(getStage());
-
-        setWidth(Gdx.graphics.getHeight()*0.05f);
-        setHeight(Gdx.graphics.getHeight()*0.05f);
     }
 
     @Override
@@ -31,4 +27,7 @@ public class ImageButton extends Actor {
     }
 
 
+    public Sprite getLook() {
+        return look;
+    }
 }

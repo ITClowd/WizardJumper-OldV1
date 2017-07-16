@@ -19,6 +19,9 @@ public class BlockButton extends ImageButton {
     public BlockButton(Sprite sprite, final Tile block) {
         super(sprite);
         this.block = block;
+
+        setSize(Gdx.graphics.getHeight()*0.05f,Gdx.graphics.getHeight()*0.05f);
+
         addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {

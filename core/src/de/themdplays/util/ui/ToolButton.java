@@ -19,6 +19,8 @@ public class ToolButton extends ImageButton {
         super(sprite);
         this.editorTool = editorTool;
 
+        setSize(Gdx.graphics.getHeight()*0.05f, Gdx.graphics.getHeight()*0.05f);
+
         addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {

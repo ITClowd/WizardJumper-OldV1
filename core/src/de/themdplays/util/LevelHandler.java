@@ -50,4 +50,11 @@ public class LevelHandler {
         Gdx.app.log("INFO", "Finished Loading User Levels");
     }
 
+    public List<WizardJumperMap> getGameMaps() {
+        return gameMaps;
+    }
+
+    public List<WizardJumperMap> getUserMaps() {
+        return userMaps;
+    }
 }

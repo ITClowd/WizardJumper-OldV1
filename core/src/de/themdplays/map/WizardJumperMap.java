@@ -15,6 +15,8 @@ public class WizardJumperMap {
     private Cell[] [] cells;
     private int width, height;
 
+    private String name = "";
+
     public WizardJumperMap(int width, int height) {
         cells = new Cell[height][width];
         for(Cell[] row : cells) {
@@ -71,6 +73,7 @@ public class WizardJumperMap {
      */
     public void load(String name) {
         compressedMap = Gdx.files.local("maps/" + name + ".wjm").readString();
+        this.name = name;
         uncompress();
     }
 
@@ -97,5 +100,9 @@ public class WizardJumperMap {
 
     public void setCells(Cell[][] cells) {
         this.cells = cells;
+    }
+
+    public String getName() {
+        return name;
     }
 }

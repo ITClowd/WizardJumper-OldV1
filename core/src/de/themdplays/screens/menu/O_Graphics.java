@@ -65,15 +65,17 @@ public class O_Graphics implements Screen {
 		int dif = Gdx.app.getGraphics().getWidth()/4;
 		
 		table.add().spaceBottom(50).row();
-		table.add(WizardJumper.langManager.get("graphics"), "big").spaceBottom(100).row();
-		table.add(vsynclabel).spaceBottom(100).spaceRight(dif);
+        table.add(WizardJumper.langManager.get("graphics"), "big").spaceBottom(100).row();
+        table.add(vsynclabel).spaceBottom(100).spaceRight(dif);
 		table.add(vsync).spaceBottom(100).spaceLeft(dif).row();
 		table.add(b_back);
 
 		ScrollPane pane = new ScrollPane(table);
 		pane.setFillParent(true);
 		pane.setOverscroll(true, true);
-		
+
+		pane.debugAll();
+
 		stage.addActor(pane);
 	}
 

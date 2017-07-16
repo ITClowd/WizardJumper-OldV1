@@ -1,8 +1,6 @@
 package de.themdplays.util;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -12,6 +10,7 @@ import com.badlogic.gdx.utils.Align;
 import de.themdplays.main.WizardJumper;
 import de.themdplays.map.Tile;
 import de.themdplays.screens.Editor;
+import de.themdplays.screens.menu.MainMenu;
 import de.themdplays.util.ui.BlockButton;
 import de.themdplays.util.ui.EditorTools;
 import de.themdplays.util.ui.ToolButton;
@@ -20,14 +19,10 @@ import de.themdplays.util.ui.ToolButton;
  * Created by Moritz on 30.12.2016.
  */
 public class EditorUIRenderer {
-
-
     private Stage stage;
 
     private ToolButton eraser, fill, pencil, save;
     private Table buttons, chooser;
-
-    private SpriteActor s_window;
 
     private Window w_save;
 
@@ -54,9 +49,6 @@ public class EditorUIRenderer {
 
         Gdx.input.setInputProcessor(stage);
 
-        s_window = new SpriteActor(new Sprite(new Texture(Gdx.files.internal("ui/window.png"))));
-        s_window.setBounds(Gdx.graphics.getWidth()*.5f-s_window.getSprite().getWidth()*.5f, Gdx.graphics.getHeight()*.5f-s_window.getSprite().getHeight()*.5f, s_window.getSprite().getWidth(), s_window.getSprite().getHeight());
-
         initSaveWindow();
 
 
@@ -64,9 +56,9 @@ public class EditorUIRenderer {
 
     private void initSaveWindow() {
 
-        w_name = new TextField("", WizardJumper.assetsHandler.getMenuSkin());
+        w_name = new TextField("", Assets.manager.get(Assets.menuSkin, Skin.class));
 
-        w_bsave = new TextButton("Save", WizardJumper.assetsHandler.getMenuSkin(), "big");
+        w_bsave = new TextButton("Save", Assets.manager.get(Assets.menuSkin, Skin.class), "big");
 
         w_bsave.addListener(new ClickListener() {
             @Override
@@ -75,7 +67,7 @@ public class EditorUIRenderer {
             }
         });
 
-        w_save = new Window("Save", WizardJumper.assetsHandler.getMenuSkin());
+        w_save = new Window("Save", Assets.manager.get(Assets.menuSkin, Skin.class));
 
         w_save.setSize(Gdx.graphics.getWidth()*0.8f, Gdx.graphics.getHeight()*0.8f);
         w_save.setPosition(Gdx.graphics.getWidth()*.5f-w_save.getWidth()*.5f, Gdx.graphics.getHeight()*.5f-w_save.getHeight()*.5f);
@@ -88,7 +80,7 @@ public class EditorUIRenderer {
         w_name.setAlignment(Align.center);
 
         w_save.setMovable(false);
-        w_save.add(new Label("Name", WizardJumper.assetsHandler.getMenuSkin(), "big")).row();
+        w_save.add(new Label("Name", Assets.manager.get(Assets.menuSkin, Skin.class), "big")).row();
         w_save.add(w_name).row();
         w_save.add(w_bsave).align(Align.bottom);
         w_save.getTitleLabel().setAlignment(Align.center);
@@ -99,16 +91,18 @@ public class EditorUIRenderer {
 
     public void render(SpriteBatch batch) {
         w_save.setVisible(Editor.getCurrentTool() == EditorTools.SAVE);
-
         stage.act();
         stage.draw();
+
+        //BACK FUNCTION
+        ButtonHandler.backFunc(new MainMenu(), stage);
     }
 
     private void initButtons() {
-        eraser = new ToolButton(WizardJumper.assetsHandler.getA_editor_UI().createSprite("Eraser"), EditorTools.ERASER);
-        fill = new ToolButton(WizardJumper.assetsHandler.getA_editor_UI().createSprite("Fill"), EditorTools.FILL);
-        pencil = new ToolButton(WizardJumper.assetsHandler.getA_editor_UI().createSprite("Pencil"), EditorTools.PENCIL);
-        save = new ToolButton(WizardJumper.assetsHandler.getA_editor_UI().createSprite("Save"), EditorTools.SAVE);
+        eraser = new ToolButton(Assets.manager.get(Assets.editorAtlas).createSprite("Eraser"), EditorTools.ERASER);
+        fill = new ToolButton(Assets.manager.get(Assets.editorAtlas).createSprite("Fill"), EditorTools.FILL);
+        pencil = new ToolButton(Assets.manager.get(Assets.editorAtlas).createSprite("Pencil"), EditorTools.PENCIL);
+        save = new ToolButton(Assets.manager.get(Assets.editorAtlas).createSprite("Save"), EditorTools.SAVE);
 
         buttons.setWidth(eraser.getWidth());
 
@@ -135,5 +129,9 @@ public class EditorUIRenderer {
 
     public Table getChooser() {
         return chooser;
+    }
+
+    public void dispose() {
+        stage.dispose();
     }
 }

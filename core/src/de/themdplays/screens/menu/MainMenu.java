@@ -3,7 +3,6 @@ package de.themdplays.screens.menu;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -14,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import de.themdplays.main.WizardJumper;
 import de.themdplays.screens.Editor;
+import de.themdplays.util.Assets;
 import de.themdplays.util.ButtonHandler;
 import de.themdplays.util.SpriteActor;
 
@@ -27,11 +27,10 @@ public class MainMenu implements Screen {
 	
 	@Override
 	public void show() {
-
 		//DECLARING STUFF
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
-        skin = WizardJumper.assetsHandler.getMenuSkin();
+        skin = Assets.manager.get(Assets.menuSkin, Skin.class);
 
 		table = new Table();
 
@@ -42,7 +41,7 @@ public class MainMenu implements Screen {
 		table.setFillParent(true);
 		table.center();
 
-		Sprite logo = new Sprite(new Texture(Gdx.files.internal("Logo.png")));
+		Sprite logo = new Sprite(Assets.manager.get(Assets.logo));
 
 		table.add(new SpriteActor(logo)).center().width(Gdx.graphics.getWidth()*0.6f).height(Gdx.graphics.getWidth()*0.6f/(logo.getWidth()/logo.getHeight())).spaceBottom(Gdx.graphics.getHeight()/10).row();
 

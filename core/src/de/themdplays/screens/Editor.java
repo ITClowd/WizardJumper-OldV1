@@ -11,10 +11,8 @@ import com.sun.scenario.effect.Flood;
 import de.themdplays.map.Cell;
 import de.themdplays.map.Tile;
 import de.themdplays.map.WizardJumperMap;
-import de.themdplays.util.Constants;
-import de.themdplays.util.EditorUIRenderer;
-import de.themdplays.util.LevelRenderer;
-import de.themdplays.util.Location;
+import de.themdplays.screens.menu.MainMenu;
+import de.themdplays.util.*;
 import de.themdplays.util.ui.EditorTools;
 
 import java.util.LinkedList;
@@ -26,25 +24,19 @@ import java.util.Queue;
 public class Editor implements Screen {
 
     private SpriteBatch batch;
-
     private static WizardJumperMap map;
-
     private static EditorTools tool;
     private static Tile currentTile;
-
     private static boolean changedTool = false;
 
     //RENDER
     private EditorUIRenderer editorUIRenderer;
     private LevelRenderer levelRenderer;
-
     private Location maplocation;
-
-
     private boolean down = false;
     private int middleX, middleY;
-
     private Tile filltmp;
+
 
     @Override
     public void show() {
@@ -60,9 +52,6 @@ public class Editor implements Screen {
         //INTI RENDER
         levelRenderer = new LevelRenderer();
         editorUIRenderer = new EditorUIRenderer();
-
-
-
     }
 
     @Override
@@ -127,7 +116,11 @@ public class Editor implements Screen {
         }
     }
 
-
+    @Override
+    public void dispose() {
+        batch.dispose();
+        editorUIRenderer.dispose();
+    }
 
     public static void setTool(EditorTools tool) {
         Editor.tool = tool;
@@ -172,13 +165,6 @@ public class Editor implements Screen {
         map.save(name);
     }
 
-//    private Cell[][] fill(Cell[][] arr,int x, int y, Tile target)
-//    {
-//
-//    }
-
-
-
     //region Unnecessary Override stuff
     @Override
     public void resize(int width, int height) {
@@ -198,10 +184,6 @@ public class Editor implements Screen {
     @Override
     public void hide() {
 
-    }
-
-    @Override
-    public void dispose() {
     }
 
     //endregion

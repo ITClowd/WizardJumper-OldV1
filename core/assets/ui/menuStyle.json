@@ -23,5 +23,8 @@
     },
     "com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle": {
       "default": { "font": "white_big", "fontColor": "white", "background": "textBox0" }
+    },
+    "com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle": {
+      "default": { "background": "default.background" }
     }
 }

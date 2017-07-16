@@ -3,10 +3,7 @@ package de.themdplays.main;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import de.themdplays.screens.Splash;
-import de.themdplays.util.AssetsHandler;
-import de.themdplays.util.Language;
-import de.themdplays.util.LanguageManager;
-import de.themdplays.util.Settings;
+import de.themdplays.util.*;
 
 public class WizardJumper extends Game {
 
@@ -23,8 +20,12 @@ public class WizardJumper extends Game {
         settings = new Settings();
         //INIT ASSETS
         assetsHandler.loadBlocks();
-
         initDir();
+
+        Assets.load();
+        while(!Assets.manager.update()) {
+            Gdx.app.log("Assets", "Loaded: " + Assets.manager.getProgress()*100 + "%");
+        }
         //Setting SplashScreen
         setScreen(new Splash());
     }
