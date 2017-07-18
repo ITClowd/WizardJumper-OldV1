@@ -28,7 +28,7 @@ public class LevelHandler {
         Gdx.app.log("INFO", "Loading Game Levels");
         for(FileHandle f : Gdx.files.local("levels").list()) {
             if(f.extension().equalsIgnoreCase("wjm")) {
-                gameMaps.add(new WizardJumperMap(f));
+                gameMaps.add(new WizardJumperMap(f, f.nameWithoutExtension()));
                 Gdx.app.log("Loaded", f.nameWithoutExtension());
             }
         }
@@ -43,7 +43,7 @@ public class LevelHandler {
         Gdx.app.log("INFO", "Loading User Levels");
         for(FileHandle f : Gdx.files.local("maps").list()) {
             if(f.extension().equalsIgnoreCase("wjm")) {
-                gameMaps.add(new WizardJumperMap(f));
+                userMaps.add(new WizardJumperMap(f, f.nameWithoutExtension()));
                 Gdx.app.log("Loaded", f.nameWithoutExtension());
             }
         }

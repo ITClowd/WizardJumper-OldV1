@@ -27,7 +27,10 @@ public class Assets {
     public static final String font = "font/Test.TTF";
 
     //Texture Atlas
-    public static final AssetDescriptor<TextureAtlas> editorAtlas = new AssetDescriptor<TextureAtlas>("ui/Editor.atlas", TextureAtlas.class);
+    public static final AssetDescriptor<TextureAtlas>
+        editorAtlas = new AssetDescriptor<TextureAtlas>("ui/Editor.atlas", TextureAtlas.class),
+        menuAtlas = new AssetDescriptor<TextureAtlas>("ui/menu.atlas", TextureAtlas.class),
+        blocksAtlas = new AssetDescriptor<TextureAtlas>("blocks/blocks.atlas", TextureAtlas.class);
 
     //Skin
     public static final String menuSkin = "ui/menuStyle.json";
@@ -61,13 +64,18 @@ public class Assets {
 
         manager.load(menuSkin, Skin.class, new SkinLoader.SkinParameter("ui/menu.atlas", resources));
         manager.load(logo);
+        manager.load(menuAtlas);
         manager.load(editorAtlas);
-
+        manager.load(blocksAtlas);
 
     }
 
     public static void dispose() {
         manager.dispose();
+    }
+
+    private void loadBlockAtlases() {
+
     }
 
 }

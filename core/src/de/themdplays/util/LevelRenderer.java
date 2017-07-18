@@ -1,10 +1,11 @@
 package de.themdplays.util;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import de.themdplays.main.WizardJumper;
+import de.themdplays.map.Tile;
 import de.themdplays.map.WizardJumperMap;
 
 /**
@@ -29,19 +30,19 @@ public class LevelRenderer {
     public void render(SpriteBatch batch, WizardJumperMap wjm) {
 
         float tileSize = Constants.TILE_SIZE*zoom;
-        Pixmap m = new Pixmap((int)tileSize, (int)tileSize, Pixmap.Format.Alpha);
+//        Pixmap m = new Pixmap((int)tileSize, (int)tileSize, Pixmap.Format.Alpha);
 
-//        Pixmap m = new Pixmap((int)tileSize, (int)tileSize, Pixmap.Format.RGB888);
-//        m.setColor(Color.RED);
-//        m.fill();
+        Pixmap m = new Pixmap((int)tileSize, (int)tileSize, Pixmap.Format.RGB888);
+        m.setColor(Color.BLACK);
+        m.fill();
         Texture emptytexture = new Texture(m);
 
         for(int y = 0; y<wjm.getHeight(); y++) {
             for(int x = 0; x<wjm.getWidth(); x++) {
                 if(wjm.getCells()[y][x] != null) {
-                    int id = wjm.getCells()[y][x].getTile().getID();
-                    if(id != 0)
-                        batch.draw(WizardJumper.assetsHandler.getBlocks().get(id).createSprites().first(), x*tileSize+mapLoc.getX(), y*tileSize+mapLoc.getY(), tileSize, tileSize);
+                    Tile tile = wjm.getCells()[y][x].getTile();
+                    if(tile != Tile.AIR)
+                        batch.draw(Assets.manager.get(Assets.blocksAtlas).createSprite(tile.name().toLowerCase()), x*tileSize+mapLoc.getX(), y*tileSize+mapLoc.getY(), tileSize, tileSize);
                     else batch.draw(emptytexture, x*tileSize+mapLoc.getX(), y*tileSize+mapLoc.getY(), tileSize, tileSize);
                 } else {
                     Gdx.app.log("LevelDraw", "Cells null");

@@ -15,11 +15,11 @@ public class WizardJumper extends Game {
 
     @Override
     public void create () {
-        assetsHandler = new AssetsHandler();
+//        assetsHandler = new AssetsHandler();
         langManager = new LanguageManager(Language.ENGLISH);
         settings = new Settings();
         //INIT ASSETS
-        assetsHandler.loadBlocks();
+//        assetsHandler.loadBlocks();
         initDir();
 
         Assets.load();

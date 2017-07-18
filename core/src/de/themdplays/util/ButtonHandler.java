@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import de.themdplays.main.WizardJumper;
 
 /**
  * Created by Moritz on 02/03/2017.
@@ -23,7 +22,7 @@ public class ButtonHandler {
      */
     public static void addButtonToTable(TextButton button, Table table) {
         table.add(button).height(Gdx.graphics.getHeight()/15).width(Gdx.graphics.getHeight()/15*
-                (WizardJumper.assetsHandler.getMenuAtlas().findRegion("button0").getRegionWidth()/WizardJumper.assetsHandler.getMenuAtlas().findRegion("button0").getRegionHeight()))
+                (Assets.manager.get(Assets.menuAtlas).findRegion("button0").getRegionWidth()/Assets.manager.get(Assets.menuAtlas).findRegion("button0").getRegionHeight()))
                 .spaceBottom(Gdx.graphics.getHeight()/60).row();
     }
 
@@ -57,13 +56,22 @@ public class ButtonHandler {
      * @param stage
      */
     public static void backFunc(final Screen screen, Stage stage) {
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) stage.addAction(Actions.sequence(Actions.fadeOut(.25f), Actions.run(new Runnable() {
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
+            stage.addAction(Actions.sequence(Actions.fadeOut(.25f), Actions.run(new Runnable() {
+                @Override
+                public void run() {
+                    backFunc(screen);
+                }
+            })));
+    }
 
-            @Override
-            public void run() {
-                ((Game) Gdx.app.getApplicationListener()).setScreen(screen);
-            }
-        })));
+    /**
+     * Changes the screen to the previous one without transition
+     * @param screen
+     */
+    public static void backFunc(final Screen screen) {
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
+            ((Game) Gdx.app.getApplicationListener()).setScreen(screen);
     }
 
 }

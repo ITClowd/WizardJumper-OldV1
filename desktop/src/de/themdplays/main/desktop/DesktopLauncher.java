@@ -34,7 +34,7 @@ public class DesktopLauncher {
 			s.paddingX = 2;
 			s.paddingY = 2;
 		
-			TexturePacker.process("D://Programmieren//Spiele//Graphics//ui//", "D://Programmieren//Spiele//WizardJumper//core//assets//ui//", "menu");
+			TexturePacker.process("D://Programmieren//Spiele//Graphics//Blocks//Grass//", "D://Programmieren//Spiele//WizardJumper//core//assets//blocks", "blocks");
 		}
 
 		

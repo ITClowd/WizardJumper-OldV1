@@ -56,12 +56,12 @@ public class Editor implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(255, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         //WORLD RENDERER
-        //UI RENDERING
         levelRenderer.render(batch, map);
+        //UI RENDERING
         editorUIRenderer.render(batch);
 
         if(Gdx.input.isButtonPressed(Input.Buttons.MIDDLE)&&!down) {
@@ -76,7 +76,6 @@ public class Editor implements Screen {
         }
 
         batch.end();
-
 
         float tileSize = Constants.TILE_SIZE*levelRenderer.getZoom();
 
@@ -114,6 +113,7 @@ public class Editor implements Screen {
                     break;
             }
         }
+        ButtonHandler.backFunc(new MainMenu());
     }
 
     @Override

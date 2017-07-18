@@ -7,7 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
-import de.themdplays.main.WizardJumper;
 import de.themdplays.map.Tile;
 import de.themdplays.screens.Editor;
 import de.themdplays.screens.menu.MainMenu;
@@ -119,7 +118,7 @@ public class EditorUIRenderer {
     private void initChooser() {
         chooser.setHeight(eraser.getHeight());
         for(Tile tile : Tile.values()) {
-            if(tile.getID() != 0) chooser.add(new BlockButton(WizardJumper.assetsHandler.getBlocks().get(tile.getID()).createSprites().first(), tile)).space(0, eraser.getHeight()*0.1f, 0, eraser.getHeight()*0.1f);
+            if(tile.getID() != 0) chooser.add(new BlockButton(Assets.manager.get(Assets.blocksAtlas).createSprite(tile.name().toLowerCase()), tile)).space(0, eraser.getHeight()*0.1f, 0, eraser.getHeight()*0.1f);
         }
     }
 

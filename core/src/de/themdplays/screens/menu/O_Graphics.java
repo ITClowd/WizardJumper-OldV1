@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import de.themdplays.main.WizardJumper;
+import de.themdplays.util.Assets;
 
 public class O_Graphics implements Screen {
 
@@ -27,7 +28,7 @@ public class O_Graphics implements Screen {
 		//DECLARING STUFF
 		stage = new Stage();
 
-        skin = WizardJumper.assetsHandler.getMenuSkin();
+        skin = Assets.manager.get(Assets.menuSkin);
 
         Table table = new Table(skin);
 

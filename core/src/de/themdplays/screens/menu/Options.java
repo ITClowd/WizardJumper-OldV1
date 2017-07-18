@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import de.themdplays.main.WizardJumper;
+import de.themdplays.util.Assets;
 import de.themdplays.util.ButtonHandler;
 
 public class Options implements Screen {
@@ -23,7 +24,7 @@ public class Options implements Screen {
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
 
-		skin = WizardJumper.assetsHandler.getMenuSkin();
+		skin = Assets.manager.get(Assets.menuSkin);
 
 		Table table = new Table();
 		

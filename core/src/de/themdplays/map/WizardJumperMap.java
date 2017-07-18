@@ -26,8 +26,9 @@ public class WizardJumperMap {
         this.height = height;
     }
 
-    public WizardJumperMap(FileHandle fileHandle) {
+    public WizardJumperMap(FileHandle fileHandle, String name) {
         compressedMap = fileHandle.readString();
+        this.name = name;
         uncompress();
     }
 
@@ -35,9 +36,10 @@ public class WizardJumperMap {
      * Compresses the map to an short string
      */
     private void compress() {
+        compressedMap = "";
         compressedMap+=width+";" + height+";";
-        for(int x = 0; x<height; x++) {
-            for(int y = 0; y<width; y++) {
+        for(int y = 0; y<height; y++) {
+            for(int x = 0; x<width; x++) {
                 compressedMap+=cells[y][x].getTile().getID()+";";
             }
         }
@@ -51,9 +53,10 @@ public class WizardJumperMap {
         this.width=Integer.parseInt(array[0]);
         this.height=Integer.parseInt(array[1]);
         cells = new Cell[height][width];
-        for(int x = 0; x<height; x++) {
-            for(int y = 0; y<width; y++) {
-                cells[y][x] = new Cell(Tile.getNameByCode(Integer.parseInt(array[(y*x)+2])));
+
+        for(int y = 0; y<height; y++) {
+            for(int x = 0; x<width; x++) {
+                cells[y][x] = new Cell(Tile.getNameByCode(Integer.parseInt(array[y*height + x+2])));
             }
         }
     }
@@ -69,9 +72,9 @@ public class WizardJumperMap {
 
     /**
      * Loads a map
-     * @param name
+     * @param fileHandle filehandle
      */
-    public void load(String name) {
+    public void load(FileHandle fileHandle) {
         compressedMap = Gdx.files.local("maps/" + name + ".wjm").readString();
         this.name = name;
         uncompress();
