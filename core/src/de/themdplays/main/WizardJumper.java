@@ -11,11 +11,9 @@ public class WizardJumper extends Game {
 
     public static LanguageManager langManager;
     public static Settings settings;
-    public static AssetsHandler assetsHandler;
 
     @Override
     public void create () {
-//        assetsHandler = new AssetsHandler();
         langManager = new LanguageManager(Language.ENGLISH);
         settings = new Settings();
         //INIT ASSETS

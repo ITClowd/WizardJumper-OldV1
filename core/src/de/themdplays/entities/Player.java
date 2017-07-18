@@ -1,4 +1,4 @@
-package de.themdplays.main;
+package de.themdplays.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
