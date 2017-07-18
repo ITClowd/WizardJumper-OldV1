@@ -1,20 +1,21 @@
 package de.themdplays.util;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonWriter;
 
 public class Settings {
 
-	private boolean vsync;
+	private boolean vSync;
 	
 	public Settings() {
-		if(Gdx.files.local("settings.ini").exists()) {
+		if(Gdx.files.local("settings.json").exists()) {
 			load();
 		} else {
-			Gdx.files.local("settings.ini").writeString(
-					Gdx.files.internal("defaultsettings.ini").readString(), false);
+		    Json json = new Json();
+		    json.setOutputType(JsonWriter.OutputType.json);
+			Gdx.files.local("settings.json").writeString(json.prettyPrint(newSettingsDescriptor()), false);
 			load();
-			
 		}
 	}
 
@@ -23,25 +24,47 @@ public class Settings {
      */
 	private void load() {
 		//READ DATA
-		JsonReader r = new JsonReader();
-		vsync = r.parse(Gdx.files.local("settings.ini")).get("Graphics").getBoolean("vsync");
-		
+        Json json = new Json();
+		SettingsDescriptor descriptor = json.fromJson(SettingsDescriptor.class, Gdx.files.local("settings.json"));
 		//APPLY PATCHES
-		Gdx.graphics.setVSync(vsync);
-		Gdx.app.log("Settings", "VSync: " + vsync);
+		Gdx.graphics.setVSync(descriptor.vSync);
+        Gdx.app.log("Settings", "VSync: " + vSync);
 		
 	}
 	
 	public void setVSync(boolean vsync) {
-		this.vsync = vsync;
+		this.vSync = vsync;
 	}
 	
 	public boolean isVSync() {
-		return vsync;
+		return vSync;
 	}
 	
 	public void save() {
-
+        Json json = new Json();
+        json.setOutputType(JsonWriter.OutputType.json);
+        Gdx.files.local("settings.json").writeString(json.prettyPrint(newSettingsDescriptor()), false);
 	}
+
+    /**
+     * creates a SettingsDescriptor object
+     * @return SettingsDescriptor
+     */
+	public SettingsDescriptor newSettingsDescriptor() {
+	    SettingsDescriptor descriptor = new SettingsDescriptor();
+
+        descriptor.vSync = false;
+        descriptor.fullscreen = false;
+
+	    return descriptor;
+	}
+
+    /**
+     *  Class to save Settings
+     */
+	public static class SettingsDescriptor {
+	    boolean fullscreen;
+	    boolean vSync;
+    }
 	
 }

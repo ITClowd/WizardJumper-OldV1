@@ -2,6 +2,7 @@ package de.themdplays.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
@@ -21,7 +22,7 @@ import java.util.Queue;
 /**
  * Created by Moritz on 30.12.2016.
  */
-public class Editor implements Screen {
+public class Editor extends InputAdapter implements Screen {
 
     private SpriteBatch batch;
     private static WizardJumperMap map;
@@ -114,6 +115,11 @@ public class Editor implements Screen {
             }
         }
         ButtonHandler.backFunc(new MainMenu());
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return super.scrolled(amount);
     }
 
     @Override
