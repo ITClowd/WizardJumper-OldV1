@@ -58,7 +58,7 @@ public class Options implements Screen {
 		stage.draw();
 
 		//BACK FUNCTION
-        ButtonHandler.backFunc(new MainMenu(), stage);
+        ButtonHandler.backFunc(new MainMenu());
 	}
 
 	@Override
