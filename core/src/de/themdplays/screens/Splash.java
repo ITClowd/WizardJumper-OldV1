@@ -7,8 +7,6 @@ import de.themdplays.screens.menu.MainMenu;
 
 public class Splash implements Screen {
 
-//	private SpriteBatch batch;
-	
 	@Override
 	public void show() {
 		//TODO Adding Splash

@@ -12,27 +12,27 @@ import java.util.List;
  */
 public class LevelHandler {
 
-    private List<WizardJumperMap> userMaps, gameMaps;
+    private List<WizardJumperMap> userMaps, storyMaps;
 
     public LevelHandler() {
         userMaps = new ArrayList<WizardJumperMap>();
-        gameMaps = new ArrayList<WizardJumperMap>();
-        loadGameLevels();
+        storyMaps = new ArrayList<WizardJumperMap>();
+        loadStoryLevels();
         loadUserMaps();
     }
 
     /**
      * Loads all Game internal maps
      */
-    private void loadGameLevels() {
-        Gdx.app.log("INFO", "Loading Game Levels");
+    private void loadStoryLevels() {
+        Gdx.app.log("INFO", "Loading Story Levels");
         for(FileHandle f : Gdx.files.local("levels").list()) {
             if(f.extension().equalsIgnoreCase("wjm")) {
-                gameMaps.add(new WizardJumperMap(f, f.nameWithoutExtension()));
+                storyMaps.add(new WizardJumperMap(f, f.nameWithoutExtension()));
                 Gdx.app.log("Loaded", f.nameWithoutExtension());
             }
         }
-        Gdx.app.log("INFO", "Finished Loading Game Levels");
+        Gdx.app.log("INFO", "Finished Loading Story Levels");
     }
 
 
@@ -50,10 +50,16 @@ public class LevelHandler {
         Gdx.app.log("INFO", "Finished Loading User Levels");
     }
 
-    public List<WizardJumperMap> getGameMaps() {
-        return gameMaps;
+    /**
+     * @return list of story maps
+     */
+    public List<WizardJumperMap> getStoryMaps() {
+        return storyMaps;
     }
 
+    /**
+     * @return lsit of user maps
+     */
     public List<WizardJumperMap> getUserMaps() {
         return userMaps;
     }

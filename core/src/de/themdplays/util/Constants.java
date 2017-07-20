@@ -2,6 +2,9 @@ package de.themdplays.util;
 
 import com.badlogic.gdx.Gdx;
 
+/**
+ * Stores some important constants of the game
+ */
 public class Constants {
 	
 	public static final int VIEWPORT_WIDTH = 1024;

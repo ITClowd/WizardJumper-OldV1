@@ -6,7 +6,11 @@ import com.badlogic.gdx.utils.JsonReader;
 public class LanguageManager {
 
 	private Language lang;
-	
+
+    /**
+     * Handles the language system
+     * @param lang
+     */
 	public LanguageManager(Language lang) {
 		this.lang = lang;
 	}

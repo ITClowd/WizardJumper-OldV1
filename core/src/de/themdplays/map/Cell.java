@@ -19,7 +19,4 @@ public class Cell {
         return tile;
     }
 
-    public void setTile(Tile tile) {
-        this.tile = tile;
-    }
 }

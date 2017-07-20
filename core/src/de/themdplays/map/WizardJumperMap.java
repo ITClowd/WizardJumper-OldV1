@@ -17,6 +17,11 @@ public class WizardJumperMap {
 
     private String name = "";
 
+    /**
+     * Creates an empty map
+     * @param width
+     * @param height
+     */
     public WizardJumperMap(int width, int height) {
         cells = new Cell[height][width];
         for(Cell[] row : cells) {
@@ -26,6 +31,11 @@ public class WizardJumperMap {
         this.height = height;
     }
 
+    /**
+     * Loads the map from the given filehandle and sets the name to the given string
+     * @param fileHandle
+     * @param name
+     */
     public WizardJumperMap(FileHandle fileHandle, String name) {
         compressedMap = fileHandle.readString();
         this.name = name;
@@ -101,10 +111,17 @@ public class WizardJumperMap {
         return width;
     }
 
+    /**
+     * Sets the 2d cell array of the map
+     * @param cells
+     */
     public void setCells(Cell[][] cells) {
         this.cells = cells;
     }
 
+    /**
+     * @return the name of the map
+     */
     public String getName() {
         return name;
     }

@@ -125,26 +125,48 @@ public class Editor extends InputAdapter implements Screen {
     @Override
     public void dispose() {
         batch.dispose();
-        editorUIRenderer.dispose();
     }
 
+    /**
+     * Sets the editor Tool to tool
+     * @param tool
+     */
     public static void setTool(EditorTools tool) {
         Editor.tool = tool;
         Gdx.app.log("INFO", "Current Tool " + tool.name());
     }
 
+    /**
+     * @return Current Editor tool
+     */
     public static EditorTools getCurrentTool() {
         return tool;
     }
 
+    /**
+     * Sets the tile to draw with
+     * @param currentTile
+     */
     public static void setCurrentTile(Tile currentTile) {
         Editor.currentTile = currentTile;
     }
 
+    /**
+     * @return the current tile to draw with
+     */
     public static Tile getCurrentTile() {
         return currentTile;
     }
 
+    /**
+     * Floodfill function //TODO FLOODFILL WITH QUEUES
+     * @param map
+     * @param x
+     * @param y
+     * @param clickedTile
+     * @return updated 2D Cellarray
+     */
+    @Deprecated
     private Cell[][] floodFill(Cell[][] map, int x, int y, final Tile clickedTile) {
 
         float tileSize = Constants.TILE_SIZE*levelRenderer.getZoom();
@@ -167,6 +189,10 @@ public class Editor extends InputAdapter implements Screen {
         return map;
     }
 
+    /**
+     * Saves the map
+     * @param name
+     */
     public static void saveMap(String name) {
         map.save(name);
     }

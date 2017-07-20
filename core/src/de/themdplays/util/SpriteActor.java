@@ -23,7 +23,4 @@ public class SpriteActor extends Actor {
                 getScaleY(), getRotation());
     }
 
-    public Sprite getSprite() {
-        return sprite;
-    }
 }

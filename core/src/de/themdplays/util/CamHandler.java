@@ -26,6 +26,7 @@ public class CamHandler {
      * @param tiledMap
      * @param p
      */
+    @Deprecated
 	public void updateCam(TiledMap tiledMap, Player p) {
 
 		int mapWidth = tiledMap.getProperties().get("width", Integer.class);

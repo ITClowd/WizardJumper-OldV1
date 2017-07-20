@@ -1,5 +1,8 @@
 package de.themdplays.util;
 
+/**
+ * Stores two floats to define a location
+ */
 public class Location {
 
 	private float x;

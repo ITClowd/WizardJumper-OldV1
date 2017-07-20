@@ -51,20 +51,34 @@ public class LevelRenderer {
         }
     }
 
+    /**
+     * Sets the current Zoom of the {@link LevelRenderer}
+     * @param zoom
+     */
     public void setZoom(float zoom) {
         if(zoom<1) this.zoom=1;
         //TODO ADD ZOOM LIMIT
         else this.zoom = zoom;
     }
 
+    /**
+     * @return float zoom
+     */
     public float getZoom() {
         return zoom;
     }
 
+    /**
+     * Sets the location where the map should be rendered
+     * @param mapLoc {@link Location}
+     */
     public void setMapLoc(Location mapLoc) {
         this.mapLoc = mapLoc;
     }
 
+    /**
+     * @return {@link Location}
+     */
     public Location getMapLoc() {
         return mapLoc;
     }

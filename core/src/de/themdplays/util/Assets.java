@@ -10,12 +10,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
 
 /**
  * Created by Moritz on 16/07/2017.
  */
-public class Assets {
+public class Assets implements Disposable {
 
     public static final AssetManager manager = new AssetManager();
 
@@ -39,6 +40,9 @@ public class Assets {
     //Texture
     public static final AssetDescriptor<Texture> logo = new AssetDescriptor<Texture>("Logo.png", Texture.class);
 
+    /**
+     * Puts the assets of the game into the queue of the assetmanager
+     */
     public static void load() {
         //FONTS
         //<editor-fold desc="Skin Resources Loading">
@@ -70,12 +74,9 @@ public class Assets {
 
     }
 
-    public static void dispose() {
+    @Override
+    public void dispose() {
         manager.dispose();
-    }
-
-    private void loadBlockAtlases() {
-
     }
 
 }

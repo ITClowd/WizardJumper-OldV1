@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Disposable;
 import de.themdplays.map.Tile;
 import de.themdplays.screens.Editor;
 import de.themdplays.screens.menu.MainMenu;
@@ -17,7 +18,7 @@ import de.themdplays.util.ui.ToolButton;
 /**
  * Created by Moritz on 30.12.2016.
  */
-public class EditorUIRenderer {
+public class EditorUIRenderer implements Disposable {
     private Stage stage;
 
     private ToolButton eraser, fill, pencil, save;
@@ -53,6 +54,9 @@ public class EditorUIRenderer {
 
     }
 
+    /**
+     * Initializes the save window object and adds it to the stage object
+     */
     private void initSaveWindow() {
 
         w_name = new TextField("", Assets.manager.get(Assets.menuSkin, Skin.class));
@@ -88,6 +92,10 @@ public class EditorUIRenderer {
         stage.addActor(w_save);
     }
 
+    /**
+     * Renders the Editor UI
+     * @param batch
+     */
     public void render(SpriteBatch batch) {
         w_save.setVisible(Editor.getCurrentTool() == EditorTools.SAVE);
         stage.act();
@@ -97,6 +105,9 @@ public class EditorUIRenderer {
         ButtonHandler.backFunc(new MainMenu(), stage);
     }
 
+    /**
+     * Initializes the Buttons table and fills it with the tool icons
+     */
     private void initButtons() {
         eraser = new ToolButton(Assets.manager.get(Assets.editorAtlas).createSprite("Eraser"), EditorTools.ERASER);
         fill = new ToolButton(Assets.manager.get(Assets.editorAtlas).createSprite("Fill"), EditorTools.FILL);
@@ -115,6 +126,9 @@ public class EditorUIRenderer {
         buttons.add(save).spaceBottom(eraser.getHeight()+eraser.getHeight()*0.1f);
     }
 
+    /**
+     * Initializes the Chooser table and fills it with every block that is registered in the enum class {@link Tile}
+     */
     private void initChooser() {
         chooser.setHeight(eraser.getHeight());
         for(Tile tile : Tile.values()) {
@@ -122,15 +136,23 @@ public class EditorUIRenderer {
         }
     }
 
+    /**
+     * @return Returns the button table
+     */
     public Table getButtons() {
         return buttons;
     }
 
+    /**
+     * @return Returns the chooser table
+     */
     public Table getChooser() {
         return chooser;
     }
 
+    @Override
     public void dispose() {
         stage.dispose();
     }
+
 }

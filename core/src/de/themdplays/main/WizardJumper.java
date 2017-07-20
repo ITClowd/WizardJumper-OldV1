@@ -17,7 +17,6 @@ public class WizardJumper extends Game {
         langManager = new LanguageManager(Language.ENGLISH);
         settings = new Settings();
         //INIT ASSETS
-//        assetsHandler.loadBlocks();
         initDir();
 
         Assets.load();

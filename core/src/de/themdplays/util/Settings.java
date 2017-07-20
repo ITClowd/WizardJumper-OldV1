@@ -29,11 +29,15 @@ public class Settings {
 		//APPLY PATCHES
 		Gdx.graphics.setVSync(descriptor.vSync);
         Gdx.app.log("Settings", "VSync: " + vSync);
-		
 	}
-	
+
+    /**
+     * Sets Vsync
+     * @param vsync
+     */
 	public void setVSync(boolean vsync) {
 		this.vSync = vsync;
+		Gdx.graphics.setVSync(vsync);
 	}
 	
 	public boolean isVSync() {
