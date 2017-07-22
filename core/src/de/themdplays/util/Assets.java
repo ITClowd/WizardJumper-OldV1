@@ -31,7 +31,8 @@ public class Assets implements Disposable {
     public static final AssetDescriptor<TextureAtlas>
         editorAtlas = new AssetDescriptor<TextureAtlas>("ui/Editor.atlas", TextureAtlas.class),
         menuAtlas = new AssetDescriptor<TextureAtlas>("ui/menu.atlas", TextureAtlas.class),
-        blocksAtlas = new AssetDescriptor<TextureAtlas>("blocks/blocks.atlas", TextureAtlas.class);
+        blocksAtlas = new AssetDescriptor<TextureAtlas>("blocks/blocks.atlas", TextureAtlas.class),
+        playerAtlas = new AssetDescriptor<TextureAtlas>("entity/player/player.atlas", TextureAtlas.class);
 
     //Skin
     public static final String menuSkin = "ui/menuStyle.json";
@@ -71,6 +72,7 @@ public class Assets implements Disposable {
         manager.load(menuAtlas);
         manager.load(editorAtlas);
         manager.load(blocksAtlas);
+        manager.load(playerAtlas);
 
     }
 

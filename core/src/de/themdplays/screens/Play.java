@@ -1,11 +1,18 @@
 package de.themdplays.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.*;
+import de.themdplays.entities.Player;
 import de.themdplays.map.WizardJumperMap;
 import de.themdplays.screens.menu.MainMenu;
 import de.themdplays.util.ButtonHandler;
 import de.themdplays.util.LevelRenderer;
+import de.themdplays.util.Location;
 
 public class Play implements Screen {
 
@@ -14,6 +21,17 @@ public class Play implements Screen {
 
     private SpriteBatch batch;
 
+    public static World world;
+    private Box2DDebugRenderer debugRenderer;
+
+    public static OrthographicCamera camera;
+
+    private final float pixelsToMeters = 32;
+
+    private final float TIMESTEP = 1/60f;
+    private final int VELOCITYITERATIONS = 8, POSITIONIITERATIONS = 3;
+
+    private Player player;
 
 
     public Play(WizardJumperMap map) {
@@ -23,23 +41,53 @@ public class Play implements Screen {
     @Override
     public void show() {
         levelRenderer = new LevelRenderer();
+        camera = new OrthographicCamera(Gdx.graphics.getWidth()/25, Gdx.graphics.getHeight()/25);
         batch = new SpriteBatch();
+
+        world = new World(new Vector2(0, -9.81f), true);
+        debugRenderer = new Box2DDebugRenderer();
+
+
+        player = new Player(new Location(0, 0), world);
     }
 
     @Override
     public void render(float delta) {
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
+//
+//        batch.begin();
+//        levelRenderer.render(batch, map);
+//        batch.end();
+
+        world.step(TIMESTEP, VELOCITYITERATIONS, POSITIONIITERATIONS);
+
+        debugRenderer.render(world, camera.combined);
+        batch.setProjectionMatrix(camera.combined);
+
         batch.begin();
-        levelRenderer.render(batch, map);
+        player.render(batch, delta);
         batch.end();
 
         ButtonHandler.backFunc(new MainMenu());
     }
 
-    //<editor-fold desc="Unnecessary override stuff">
     @Override
     public void resize(int width, int height) {
-
+        camera.viewportWidth = width/25;
+        camera.viewportHeight = height/25;
+        camera.update();
     }
+
+    @Override
+    public void dispose() {
+        batch.dispose();
+        world.dispose();
+        debugRenderer.dispose();
+    }
+
+    //<editor-fold desc="Unnecessary override stuff">
+
 
     @Override
     public void pause() {
@@ -56,9 +104,6 @@ public class Play implements Screen {
 
     }
 
-    @Override
-    public void dispose() {
 
-    }
     //</editor-fold>
 }

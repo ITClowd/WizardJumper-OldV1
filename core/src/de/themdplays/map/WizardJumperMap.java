@@ -2,8 +2,11 @@ package de.themdplays.map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import de.themdplays.entities.Entity;
+import de.themdplays.util.Location;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Moritz on 23.12.2016.
@@ -19,8 +22,8 @@ public class WizardJumperMap {
 
     /**
      * Creates an empty map
-     * @param width
-     * @param height
+     * @param width width of the map
+     * @param height height of the map
      */
     public WizardJumperMap(int width, int height) {
         cells = new Cell[height][width];
@@ -33,8 +36,8 @@ public class WizardJumperMap {
 
     /**
      * Loads the map from the given filehandle and sets the name to the given string
-     * @param fileHandle
-     * @param name
+     * @param fileHandle path to mapfile
+     * @param name name of the map
      */
     public WizardJumperMap(FileHandle fileHandle, String name) {
         compressedMap = fileHandle.readString();
@@ -53,6 +56,7 @@ public class WizardJumperMap {
                 compressedMap+=cells[y][x].getTile().getID()+";";
             }
         }
+
     }
 
     /**
@@ -69,11 +73,12 @@ public class WizardJumperMap {
                 cells[y][x] = new Cell(Tile.getNameByCode(Integer.parseInt(array[y*height + x+2])));
             }
         }
+
     }
 
     /**
      * Saves an map
-     * @param name
+     * @param name name of the map (file will be name.wjm)
      */
     public void save(String name) {
         compress();
@@ -125,4 +130,10 @@ public class WizardJumperMap {
     public String getName() {
         return name;
     }
+
+    public static class AttributeDescriptor {
+        Location spawnpoint;
+        List<Entity> entityList;
+    }
+
 }
