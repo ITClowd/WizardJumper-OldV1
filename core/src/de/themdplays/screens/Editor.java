@@ -1,14 +1,10 @@
 package de.themdplays.screens;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.sun.scenario.effect.Flood;
 import de.themdplays.map.Cell;
 import de.themdplays.map.Tile;
 import de.themdplays.map.WizardJumperMap;
@@ -53,6 +49,9 @@ public class Editor extends InputAdapter implements Screen {
         //INTI RENDER
         levelRenderer = new LevelRenderer();
         editorUIRenderer = new EditorUIRenderer();
+
+        Gdx.input.setInputProcessor(new InputMultiplexer(this, editorUIRenderer.getStage()));
+
     }
 
     @Override
@@ -61,7 +60,7 @@ public class Editor extends InputAdapter implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         //WORLD RENDERER
-        levelRenderer.render(batch, map);
+        levelRenderer.render(batch, map, false); //TO NOT CONVERT IT TO BOX2D
         //UI RENDERING
         editorUIRenderer.render(batch);
 
@@ -119,7 +118,8 @@ public class Editor extends InputAdapter implements Screen {
 
     @Override
     public boolean scrolled(int amount) {
-        return super.scrolled(amount);
+        levelRenderer.setZoom(levelRenderer.getZoom()+(-amount*0.2f));
+        return false;
     }
 
     @Override

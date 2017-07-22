@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
@@ -20,7 +19,7 @@ public class Player extends Entity {
 
 	private Sprite look;
 	
-	private final static float PLAYERSPEED = 500;
+	private final static float PLAYERSPEED = 200;
 
 	private TextureAtlas player_atlas;
 
@@ -49,9 +48,6 @@ public class Player extends Entity {
                     case Keys.A:
                         velocity.x = -PLAYERSPEED;
                         break;
-                    case Keys.S:
-                        velocity.y = -PLAYERSPEED;
-                        break;
                     case Keys.D:
                         velocity.x = PLAYERSPEED;
                         break;
@@ -62,10 +58,6 @@ public class Player extends Entity {
             @Override
             public boolean keyUp(int keycode) {
                 switch(keycode) {
-                    case Keys.W:
-                    case Keys.S:
-                        velocity.y = 0;
-                        break;
                     case Keys.A:
                     case Keys.D:
                         velocity.x = 0;
@@ -89,28 +81,23 @@ public class Player extends Entity {
 
         Play.camera.update();
 
-//		if(Gdx.input.isKeyPressed(Keys.A)) velocity.x = Gdx.graphics.getDeltaTime()*10 * PLAYERSPEED * -1;
-//		else if(Gdx.input.isKeyPressed(Keys.D)) velocity.x = Gdx.graphics.getDeltaTime()*10 * PLAYERSPEED;
-//		else velocity.x = 0;
-//		if(Gdx.input.isKeyPressed(Keys.W)) super.jump();
-//		if(!Gdx.input.isKeyPressed(Keys.A) && !Gdx.input.isKeyPressed(Keys.D)) super.velocity.x = 0;
-//        if(Gdx.input.isKeyPressed(Keys.S)) super.isOnGround = true;
-
-
         super.body.applyForceToCenter(velocity, true);
 
-		//Spriteanimation
-		elapsedTime += Gdx.graphics.getDeltaTime() * PLAYERSPEED/8;
+        if(body.getLinearVelocity().x >= 10) body.setLinearVelocity(10, body.getLinearVelocity().y);
+        if(body.getLinearVelocity().x <= -10) body.setLinearVelocity(-10, body.getLinearVelocity().y);
 
-		if(velocity.x > 0) {
+        //Spriteanimation
+		elapsedTime += Gdx.graphics.getDeltaTime() * body.getLinearVelocity().x*10/8;
+
+		if(body.getLinearVelocity().x > 0) {
 			look = new Sprite(walk_right.getKeyFrame(elapsedTime, true));
-		} else if(velocity.x < 0) {
+		} else if(body.getLinearVelocity().x < 0) {
 			look = new Sprite(walk_left.getKeyFrame(elapsedTime, true));
 		} else {
 			look = standing;
 		}
 
-		look.setSize(2, 2);
+        look.setSize(2, 2);
         look.setOriginCenter();
 		body.setUserData(look);
 
@@ -124,8 +111,6 @@ public class Player extends Entity {
         sprite.setPosition(body.getPosition().x-sprite.getWidth()*0.5f, body.getPosition().y-sprite.getHeight()*0.5f);
         sprite.setRotation(body.getAngle() * MathUtils.radiansToDegrees);
         sprite.draw(batch);
-
-//		batch.draw(look, loc.getX(), loc.getY());
 
 	}
 
@@ -172,15 +157,13 @@ public class Player extends Entity {
         //body def
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(0, 1);
+        bodyDef.position.set(getLocation().getX(), getLocation().getY());
         bodyDef.fixedRotation = true;
 
         //ballshape
         PolygonShape box = new PolygonShape();
-        box.setAsBox(1,1);
+        box.setAsBox(0.9f,1);
 
-
-        //0.6F, 0.1F, 0.0F
         //fixture def
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = box;
@@ -192,23 +175,6 @@ public class Player extends Entity {
         body.createFixture(fixtureDef);
 
         box.dispose();
-
-        //ground
-        bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(0,0);
-
-        //Ground shape
-        ChainShape groundShape = new ChainShape();
-        groundShape.createChain(new Vector2[]{new Vector2(-50, 0), new Vector2(50, 0)});
-
-        fixtureDef.shape = groundShape;
-        fixtureDef.friction = .5f;
-        fixtureDef.restitution = 0;
-
-        Play.world.createBody(bodyDef).createFixture(fixtureDef);
-
-        groundShape.dispose();
-
         return body;
     }
 }

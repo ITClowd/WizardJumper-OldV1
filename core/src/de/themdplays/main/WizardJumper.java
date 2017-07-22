@@ -14,6 +14,9 @@ public class WizardJumper extends Game {
 
     @Override
     public void create () {
+
+        System.out.println(Gdx.files.getLocalStoragePath());
+
         langManager = new LanguageManager(Language.ENGLISH);
         settings = new Settings();
         //INIT ASSETS

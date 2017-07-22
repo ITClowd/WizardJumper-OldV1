@@ -47,8 +47,6 @@ public class EditorUIRenderer implements Disposable {
         initButtons();
         initChooser();
 
-        Gdx.input.setInputProcessor(stage);
-
         initSaveWindow();
 
 
@@ -148,6 +146,13 @@ public class EditorUIRenderer implements Disposable {
      */
     public Table getChooser() {
         return chooser;
+    }
+
+    /**
+     * @return Returns {@link #stage}
+     */
+    public Stage getStage() {
+        return stage;
     }
 
     @Override
