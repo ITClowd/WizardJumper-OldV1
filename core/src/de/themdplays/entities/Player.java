@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
@@ -20,7 +19,7 @@ public class Player extends Entity {
 
 	private Sprite look;
 	
-	private final static float PLAYERSPEED = 500;
+	private final static float PLAYERSPEED = 200;
 
 	private TextureAtlas player_atlas;
 
@@ -49,9 +48,6 @@ public class Player extends Entity {
                     case Keys.A:
                         velocity.x = -PLAYERSPEED;
                         break;
-                    case Keys.S:
-                        velocity.y = -PLAYERSPEED;
-                        break;
                     case Keys.D:
                         velocity.x = PLAYERSPEED;
                         break;
@@ -62,10 +58,6 @@ public class Player extends Entity {
             @Override
             public boolean keyUp(int keycode) {
                 switch(keycode) {
-                    case Keys.W:
-                    case Keys.S:
-                        velocity.y = 0;
-                        break;
                     case Keys.A:
                     case Keys.D:
                         velocity.x = 0;
@@ -95,7 +87,6 @@ public class Player extends Entity {
 //		if(Gdx.input.isKeyPressed(Keys.W)) super.jump();
 //		if(!Gdx.input.isKeyPressed(Keys.A) && !Gdx.input.isKeyPressed(Keys.D)) super.velocity.x = 0;
 //        if(Gdx.input.isKeyPressed(Keys.S)) super.isOnGround = true;
-
 
         super.body.applyForceToCenter(velocity, true);
 
@@ -172,7 +163,7 @@ public class Player extends Entity {
         //body def
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(0, 1);
+        bodyDef.position.set(getLocation().getX(), getLocation().getY());
         bodyDef.fixedRotation = true;
 
         //ballshape
@@ -192,23 +183,6 @@ public class Player extends Entity {
         body.createFixture(fixtureDef);
 
         box.dispose();
-
-        //ground
-        bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(0,0);
-
-        //Ground shape
-        ChainShape groundShape = new ChainShape();
-        groundShape.createChain(new Vector2[]{new Vector2(-50, 0), new Vector2(50, 0)});
-
-        fixtureDef.shape = groundShape;
-        fixtureDef.friction = .5f;
-        fixtureDef.restitution = 0;
-
-        Play.world.createBody(bodyDef).createFixture(fixtureDef);
-
-        groundShape.dispose();
-
         return body;
     }
 }

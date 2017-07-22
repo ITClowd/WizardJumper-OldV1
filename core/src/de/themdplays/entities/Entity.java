@@ -69,7 +69,7 @@ public abstract class Entity {
 
 	protected abstract Body createBody();
 
-	private boolean isOnGround() {
+	public boolean isOnGround() {
 	    return body.getLinearVelocity().y == 0;
     }
 

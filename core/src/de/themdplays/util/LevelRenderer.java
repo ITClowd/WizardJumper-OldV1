@@ -27,9 +27,9 @@ public class LevelRenderer {
      * Renders a WizardJumperMap
      * @param batch
      */
-    public void render(SpriteBatch batch, WizardJumperMap wjm) {
+    public void render(SpriteBatch batch, WizardJumperMap wjm, boolean toBox2D) {
 
-        float tileSize = Constants.TILE_SIZE*zoom;
+        float tileSize = Constants.TILE_SIZE*zoom / (toBox2D?Constants.PIXELS_TO_METERS:1);
 //        Pixmap m = new Pixmap((int)tileSize, (int)tileSize, Pixmap.Format.Alpha);
 
         Pixmap m = new Pixmap((int)tileSize, (int)tileSize, Pixmap.Format.RGB888);
