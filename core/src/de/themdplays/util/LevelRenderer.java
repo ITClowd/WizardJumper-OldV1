@@ -33,7 +33,7 @@ public class LevelRenderer {
 //        Pixmap m = new Pixmap((int)tileSize, (int)tileSize, Pixmap.Format.Alpha);
 
         Pixmap m = new Pixmap((int)tileSize, (int)tileSize, Pixmap.Format.RGB888);
-        m.setColor(Color.BLACK);
+        m.setColor(Color.RED);
         m.fill();
         Texture emptytexture = new Texture(m);
 
@@ -42,7 +42,7 @@ public class LevelRenderer {
                 if(wjm.getCells()[y][x] != null) {
                     Tile tile = wjm.getCells()[y][x].getTile();
                     if(tile != Tile.AIR)
-                        batch.draw(Assets.manager.get(Assets.blocksAtlas).createSprite(tile.name().toLowerCase()), x*tileSize+mapLoc.getX(), y*tileSize+mapLoc.getY(), tileSize, tileSize);
+                        batch.draw(EdgeRecognizer.getSprite(wjm.getCells(), x, y), x*tileSize+mapLoc.getX(), y*tileSize+mapLoc.getY(), tileSize, tileSize);
                     else batch.draw(emptytexture, x*tileSize+mapLoc.getX(), y*tileSize+mapLoc.getY(), tileSize, tileSize);
                 } else {
                     Gdx.app.log("LevelDraw", "Cells null");

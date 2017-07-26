@@ -4,14 +4,16 @@ package de.themdplays.map;
  * Created by Moritz on 23.12.2016.
  */
 public enum Tile {
-    AIR(0),
-    DIRT(1),
-    STONE(2);
+    AIR(0, false),
+    DIRT(1, true),
+    STONE(2, false);
 
     int id;
+    boolean edge;
 
-    Tile(int id) {
+    Tile(int id, boolean edge) {
         this.id=id;
+        this.edge = edge;
     }
 
     /**
@@ -31,5 +33,9 @@ public enum Tile {
             if(code == e.id) return e;
         }
         return null;
+    }
+
+    public boolean isEdge() {
+        return edge;
     }
 }

@@ -39,7 +39,7 @@ public class Editor extends InputAdapter implements Screen {
     public void show() {
         batch = new SpriteBatch();
 
-        map = new WizardJumperMap(100, 100);
+        map = new WizardJumperMap(200, 100);
 
         maplocation = new Location(0, 0);
 
@@ -56,7 +56,7 @@ public class Editor extends InputAdapter implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(255, 0, 0, 1);
+        Gdx.gl.glClearColor(0, 255, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         //WORLD RENDERER

@@ -21,11 +21,10 @@ public class DesktopLauncher {
         cfg.addIcon("icon/Icon_128x128.png", FileType.Internal);
         cfg.addIcon("icon/Icon_16x16.png", FileType.Internal);
 
-//        System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
-//        cfg.width = LwjglApplicationConfiguration.getDesktopDisplayMode().width;
-//        cfg.height = LwjglApplicationConfiguration.getDesktopDisplayMode().height;
+        System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
+        cfg.width = LwjglApplicationConfiguration.getDesktopDisplayMode().width;
+        cfg.height = LwjglApplicationConfiguration.getDesktopDisplayMode().height;
 		cfg.fullscreen = false;
-		
 		cfg.resizable = false;
 		
 		boolean PACKER = false;
@@ -36,7 +35,7 @@ public class DesktopLauncher {
 			s.paddingX = 2;
 			s.paddingY = 2;
 		
-			TexturePacker.process("D://Programmieren//Spiele//Graphics//Blocks//Grass//", "D://Programmieren//Spiele//WizardJumper//core//assets//blocks", "blocks");
+			TexturePacker.process("/home/moritz/dirt/", "/home/moritz/dirt/packer/", "blocks");
 		}
 
 		

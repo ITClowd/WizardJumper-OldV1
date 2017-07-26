@@ -24,7 +24,7 @@ public class WizardJumper extends Game {
 
         Assets.load();
         while(!Assets.manager.update()) {
-            Gdx.app.log("Assets", "Loaded: " + Assets.manager.getProgress()*100 + "%");
+//            Gdx.app.log("Assets", "Loaded: " + Assets.manager.getProgress()*100 + "%");
         }
         //Setting SplashScreen
         setScreen(new Splash());
