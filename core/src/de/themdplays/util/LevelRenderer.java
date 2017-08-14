@@ -5,6 +5,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector2;
 import de.themdplays.map.Tile;
 import de.themdplays.map.WizardJumperMap;
 
@@ -17,10 +20,14 @@ public class LevelRenderer {
 
     private Location mapLoc;
 
+    private ShapeRenderer shapeRenderer;
+
     public LevelRenderer() {
         this.zoom = 2;
 
         this.mapLoc = new Location(0,0);
+
+        this.shapeRenderer = new ShapeRenderer();
     }
 
     /**
@@ -33,7 +40,7 @@ public class LevelRenderer {
 //        Pixmap m = new Pixmap((int)tileSize, (int)tileSize, Pixmap.Format.Alpha);
 
         Pixmap m = new Pixmap((int)tileSize, (int)tileSize, Pixmap.Format.RGB888);
-        m.setColor(Color.RED);
+        m.setColor(Color.ROYAL);
         m.fill();
         Texture emptytexture = new Texture(m);
 
@@ -49,6 +56,9 @@ public class LevelRenderer {
                 }
             }
         }
+
+        drawDashedLines(batch.getProjectionMatrix(), wjm, tileSize);
+
     }
 
     /**
@@ -81,5 +91,43 @@ public class LevelRenderer {
      */
     public Location getMapLoc() {
         return mapLoc;
+    }
+
+    /**
+     * Draws dashed lines when in editor
+     */
+    public void drawDashedLines(Matrix4 projectionmatrix, WizardJumperMap wjm, float tileSize) {
+        shapeRenderer.setProjectionMatrix(projectionmatrix);
+        for(int i = 0; i<Gdx.graphics.getWidth()/tileSize; i++) {
+//            shapeRenderer.line(i*tileSize+(mapLoc.getX()%tileSize), 0, i*tileSize+(mapLoc.getX()%tileSize), Gdx.graphics.getHeight());
+            drawDottedLine(shapeRenderer, (int)tileSize/4, i*tileSize+(mapLoc.getX()%tileSize), mapLoc.getY()%tileSize, i*tileSize+(mapLoc.getX()%tileSize), Gdx.graphics.getHeight());
+        }
+        for(int i = 0; i<Gdx.graphics.getHeight()/tileSize; i++) {
+//            shapeRenderer.line(0, i*tileSize+(mapLoc.getY()%tileSize), Gdx.graphics.getWidth(), i*tileSize+(mapLoc.getY()%tileSize));
+            drawDottedLine(shapeRenderer, (int)tileSize/4, mapLoc.getX()%tileSize, i*tileSize+(mapLoc.getY()%tileSize), Gdx.graphics.getWidth(), i*tileSize+(mapLoc.getY()%tileSize));
+        }
+        shapeRenderer.end();
+    }
+
+    /**
+     * Draws a dotted line between to points (x1,y1) and (x2,y2).
+     * @param shapeRenderer
+     * @param dotDist (distance between dots)
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2
+     */
+    private void drawDottedLine(ShapeRenderer shapeRenderer, int dotDist, float x1, float y1, float x2, float y2) {
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Point);
+
+        Vector2 vec2 = new Vector2(x2, y2).sub(new Vector2(x1, y1));
+        float length = vec2.len();
+        for(int i = 0; i < length; i += dotDist) {
+            vec2.clamp(length - i, length - i);
+            shapeRenderer.point(x1 + vec2.x, y1 + vec2.y, 0);
+        }
+
+        shapeRenderer.end();
     }
 }

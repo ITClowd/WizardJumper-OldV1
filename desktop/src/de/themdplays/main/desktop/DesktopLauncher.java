@@ -21,9 +21,9 @@ public class DesktopLauncher {
         cfg.addIcon("icon/Icon_128x128.png", FileType.Internal);
         cfg.addIcon("icon/Icon_16x16.png", FileType.Internal);
 
-        System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
-        cfg.width = LwjglApplicationConfiguration.getDesktopDisplayMode().width;
-        cfg.height = LwjglApplicationConfiguration.getDesktopDisplayMode().height;
+//        System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
+//        cfg.width = LwjglApplicationConfiguration.getDesktopDisplayMode().width;
+//        cfg.height = LwjglApplicationConfiguration.getDesktopDisplayMode().height;
 		cfg.fullscreen = false;
 		cfg.resizable = false;
 		

@@ -47,8 +47,6 @@ public class Assets implements Disposable {
     public static void load() {
         //FONTS
         //<editor-fold desc="Skin Resources Loading">
-        TextureAtlas buttonAtlas = new TextureAtlas(Gdx.files.internal("ui/menu.atlas"));
-
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/Test.TTF"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = Constants.FONT_SIZE_SMALL;

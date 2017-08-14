@@ -1,12 +1,14 @@
 package de.themdplays.screens.menu;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -64,7 +66,12 @@ public class MainMenu implements Screen {
 		//CLEAR SCREEN
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
+
+		if(Gdx.input.isKeyPressed(Input.Keys.F11)) {
+			Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+		}
+
+
 		//RENDER MENU
 		stage.act();
 		stage.draw();
@@ -72,7 +79,7 @@ public class MainMenu implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		
+		stage.getViewport().update(width, height, true);
 	}
 
 	@Override

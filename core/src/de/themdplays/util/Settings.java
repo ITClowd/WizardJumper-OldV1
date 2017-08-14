@@ -1,6 +1,7 @@
 package de.themdplays.util;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 
@@ -43,7 +44,10 @@ public class Settings {
 	public boolean isVSync() {
 		return vSync;
 	}
-	
+
+	/**
+	 * Saves the settings
+	 */
 	public void save() {
         Json json = new Json();
         json.setOutputType(JsonWriter.OutputType.json);
