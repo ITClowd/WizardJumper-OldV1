@@ -12,6 +12,7 @@ import de.themdplays.screens.menu.MainMenu;
 import de.themdplays.util.*;
 import de.themdplays.util.ui.EditorTools;
 
+import java.awt.*;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -109,7 +110,7 @@ public class Editor extends InputAdapter implements Screen {
 
                     Tile tile =   map.getCells()[y][x].getTile();
                     filltmp = tile;
-                    map.setCells(floodFill(map.getCells(), x, y, tile));
+                    map.setCells(floodQueueFill(map.getCells(), x, y, tile));
                     break;
             }
         }
@@ -186,6 +187,38 @@ public class Editor extends InputAdapter implements Screen {
                 map = floodFill(map, x, y + 1, filltmp);
             }
         }
+        return map;
+    }
+
+    /**
+     * Improved FloodFill function using queues
+     * @param map
+     * @param x
+     * @param y
+     * @param clickedTile
+     * @return updated 2D Cellarray
+     */
+    private Cell[][] floodQueueFill(Cell[][] map, int x, int y, final Tile clickedTile) {
+        Queue<Point> queue = new LinkedList<Point>();
+        if(map[y][x].getTile() != clickedTile)
+            return map;
+
+        queue.add(new Point(x, y));
+
+        int iterations = 0;
+
+        while (!queue.isEmpty()) {
+            Point p = queue.remove();
+            iterations++;
+            if(map[p.y][p.x].getTile() == clickedTile && map[p.y][p.x].getTile() != currentTile) {
+                map[p.y][p.x] = new Cell(currentTile);
+                if(p.x>0)                    queue.add(new Point(p.x-1, p.y));
+                if(p.x<this.map.getWidth()-1)   queue.add(new Point(p.x+1, p.y));
+                if(p.y>0)                    queue.add(new Point(p.x, p.y-1));
+                if(p.y<this.map.getHeight()-1)  queue.add(new Point(p.x, p.y+1));
+            }
+        }
+        Gdx.app.log("Fill", "Blocks filled: " + iterations);
         return map;
     }
 
