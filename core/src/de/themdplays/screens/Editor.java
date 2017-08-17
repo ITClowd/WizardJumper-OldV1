@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import de.themdplays.map.Cell;
 import de.themdplays.map.Tile;
 import de.themdplays.map.WizardJumperMap;
@@ -13,7 +15,9 @@ import de.themdplays.util.*;
 import de.themdplays.util.ui.EditorTools;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 /**
@@ -32,9 +36,9 @@ public class Editor extends InputAdapter implements Screen {
     private LevelRenderer levelRenderer;
     private Location maplocation;
     private boolean down = false;
-    private int middleX, middleY;
+    private int middleX, middleY, oldTranslatedX, oldTranslatedY;
     private Tile filltmp;
-
+    private Queue<List<Cell>> changes = new LinkedList<List<Cell>>();
 
     @Override
     public void show() {
@@ -78,48 +82,81 @@ public class Editor extends InputAdapter implements Screen {
 
         batch.end();
 
-        float tileSize = Constants.TILE_SIZE*levelRenderer.getZoom();
+        if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+            float tileSize = Constants.TILE_SIZE*levelRenderer.getZoom();
+            int translatedX = (int)((Gdx.input.getX()-levelRenderer.getMapLoc().getX())/tileSize);
+            int translatedY = (int)((Gdx.graphics.getHeight()-Gdx.input.getY()-levelRenderer.getMapLoc().getY())/tileSize);
 
-        if(Gdx.input.isButtonPressed(Input.Buttons.LEFT) && Gdx.input.getY()<=Gdx.graphics.getHeight()&&
-        //BOUNDS
-                ((Gdx.graphics.getHeight()-Gdx.input.getY()-(int)levelRenderer.getMapLoc().getY())/(int)tileSize)>=0&&
-                ((Gdx.graphics.getHeight()-Gdx.input.getY()-(int)levelRenderer.getMapLoc().getY())/(int)tileSize)<map.getHeight()&&
-                ((Gdx.input.getX()-(int)levelRenderer.getMapLoc().getX())/(int)tileSize>=0)&&
-                ((Gdx.input.getX()-(int)levelRenderer.getMapLoc().getX())/(int)tileSize)<map.getWidth()&&
-                Gdx.input.getX()>=editorUIRenderer.getButtons().getWidth()+editorUIRenderer.getButtons().getX()+Gdx.graphics.getWidth()*0.04f&&
-                Gdx.input.getY()<=Gdx.graphics.getHeight()-(editorUIRenderer.getChooser().getHeight()+editorUIRenderer.getChooser().getY()+Gdx.graphics.getWidth()*0.04f)) {
-
-            switch(tool) {
-                case PENCIL:
-                    Cell[] [] tmp = map.getCells();
-                    tmp[(Gdx.graphics.getHeight()-Gdx.input.getY()-(int)levelRenderer.getMapLoc().getY())/(int)tileSize]
-                            [(Gdx.input.getX()-(int)levelRenderer.getMapLoc().getX())/(int)tileSize] = new Cell(currentTile);
-                    map.setCells(tmp);
-                    break;
-                case ERASER:
-                    Cell[] [] eraser_tmp = map.getCells();
-                    eraser_tmp[(Gdx.graphics.getHeight()-Gdx.input.getY()-(int)levelRenderer.getMapLoc().getY())/(int)tileSize]
-                            [(Gdx.input.getX()-(int)levelRenderer.getMapLoc().getX())/(int)tileSize] = new Cell(Tile.AIR);
-                    map.setCells(eraser_tmp);
-                    break;
-                case FILL:
-
-                    int x = (Gdx.input.getX()-(int)levelRenderer.getMapLoc().getX())/(int)tileSize;
-                    int y = (Gdx.graphics.getHeight()-Gdx.input.getY()-(int)levelRenderer.getMapLoc().getY())/(int)tileSize;
+            if(Gdx.input.getY()<=Gdx.graphics.getHeight()&&
+                    //BOUNDS
+                    translatedY>=0&&
+                    translatedY<map.getHeight()&&
+                    translatedX>=0&&
+                    translatedX<map.getWidth()&&
+                    Gdx.input.getX()>=editorUIRenderer.getButtons().getWidth()+editorUIRenderer.getButtons().getX()+Gdx.graphics.getWidth()*0.04f&&
+                    Gdx.input.getY()<=Gdx.graphics.getHeight()-(editorUIRenderer.getChooser().getHeight()+editorUIRenderer.getChooser().getY()+Gdx.graphics.getWidth()*0.04f)) {
 
 
-                    Tile tile =   map.getCells()[y][x].getTile();
-                    filltmp = tile;
-                    map.setCells(floodQueueFill(map.getCells(), x, y, tile));
-                    break;
+                Cell[] [] tmp = map.getCells();
+
+                switch(tool) {
+                    case PENCIL:
+                        if(map.getCells()[translatedY][translatedX].getTile() != currentTile) {
+                            List<Cell> c = new ArrayList<Cell>();
+                            c.add(tmp[translatedY][translatedX]);
+                            changes.add(c);
+                            tmp[translatedY] [translatedX] = new Cell(currentTile, new Vector2(translatedX, translatedY));
+                            map.setCells(tmp);
+                        }
+                        break;
+                    case ERASER:
+                        List<Cell> c = new ArrayList<Cell>();
+                        c.add(tmp[translatedY][translatedX]);
+                        changes.add(c);
+                        tmp[translatedY][translatedX] = new Cell(Tile.AIR, new Vector2(translatedX, translatedY));
+                        map.setCells(tmp);
+                        break;
+                    case FILL:
+                        if(map.getCells()[translatedY][translatedX].getTile() != currentTile) {
+                            Tile tile =   map.getCells()[translatedY][translatedX].getTile();
+                            filltmp = tile;
+                            map.setCells(floodQueueFill(map.getCells(), translatedX, translatedY, tile));
+                        }
+                        break;
+                }
             }
         }
+
         ButtonHandler.backFunc(new MainMenu());
     }
 
     @Override
+    public boolean keyUp(int keycode) {
+        if(keycode == Input.Keys.Z) {
+            if(!changes.isEmpty()) {
+                List<Cell> tmp = changes.remove();
+                Cell[][] celltmp = map.getCells();
+                for(Cell cell : tmp) {
+                    celltmp[(int)cell.getLocation().y][(int)cell.getLocation().x] = cell;
+                }
+                map.setCells(celltmp);
+            }
+
+        }
+        return false;
+    }
+
+    @Override
     public boolean scrolled(int amount) {
-        levelRenderer.setZoom(levelRenderer.getZoom()+(-amount*0.2f));
+
+        float newZoom = levelRenderer.getZoom()+(-amount*0.2f);
+
+        float x = Gdx.graphics.getWidth()/2 + (levelRenderer.getMapLoc().getX() - Gdx.graphics.getWidth()/2) * (float) newZoom / (float) levelRenderer.getZoom();
+        float y = Gdx.graphics.getHeight()/2 + (levelRenderer.getMapLoc().getY() - Gdx.graphics.getHeight()/2) * (float) newZoom / (float) levelRenderer.getZoom();
+
+        levelRenderer.setMapLoc(new Location(x, y));
+
+        levelRenderer.setZoom(newZoom);
         return false;
     }
 
@@ -160,37 +197,6 @@ public class Editor extends InputAdapter implements Screen {
     }
 
     /**
-     * Floodfill function //TODO FLOODFILL WITH QUEUES
-     * @param map
-     * @param x
-     * @param y
-     * @param clickedTile
-     * @return updated 2D Cellarray
-     */
-    @Deprecated
-    private Cell[][] floodFill(Cell[][] map, int x, int y, final Tile clickedTile) {
-
-        float tileSize = Constants.TILE_SIZE*levelRenderer.getZoom();
-
-        if(x>=0&&x<this.map.getWidth()&&y>=0&&y<this.map.getHeight()) {
-
-
-
-            final Tile tile = clickedTile;
-
-
-            if (map[y][x].getTile() == filltmp && map[y][x].getTile() != currentTile) {
-                map[y][x] = new Cell(currentTile);
-                map = floodFill(map, x - 1, y, filltmp);
-                map = floodFill(map, x + 1, y, filltmp);
-                map = floodFill(map, x, y - 1, filltmp);
-                map = floodFill(map, x, y + 1, filltmp);
-            }
-        }
-        return map;
-    }
-
-    /**
      * Improved FloodFill function using queues
      * @param map
      * @param x
@@ -206,18 +212,22 @@ public class Editor extends InputAdapter implements Screen {
         queue.add(new Point(x, y));
 
         int iterations = 0;
+        List<Cell> c = new ArrayList<Cell>();
 
         while (!queue.isEmpty()) {
             Point p = queue.remove();
-            iterations++;
             if(map[p.y][p.x].getTile() == clickedTile && map[p.y][p.x].getTile() != currentTile) {
-                map[p.y][p.x] = new Cell(currentTile);
+                iterations++;
+                c.add(map[p.y][p.x]);
+
+                map[p.y][p.x] = new Cell(currentTile, new Vector2(p.x, p.y));
                 if(p.x>0)                    queue.add(new Point(p.x-1, p.y));
                 if(p.x<this.map.getWidth()-1)   queue.add(new Point(p.x+1, p.y));
                 if(p.y>0)                    queue.add(new Point(p.x, p.y-1));
                 if(p.y<this.map.getHeight()-1)  queue.add(new Point(p.x, p.y+1));
             }
         }
+        changes.add(c);
         Gdx.app.log("Fill", "Blocks filled: " + iterations);
         return map;
     }

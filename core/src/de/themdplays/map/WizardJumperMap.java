@@ -2,6 +2,7 @@ package de.themdplays.map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.math.Vector2;
 import de.themdplays.entities.Entity;
 import de.themdplays.util.Location;
 
@@ -28,7 +29,7 @@ public class WizardJumperMap {
     public WizardJumperMap(int width, int height) {
         cells = new Cell[height][width];
         for(Cell[] row : cells) {
-            Arrays.fill(row, new Cell(Tile.AIR));
+            Arrays.fill(row, new Cell(Tile.AIR, new Vector2(0, 0)));
         }
         this.width = width;
         this.height = height;
@@ -70,7 +71,7 @@ public class WizardJumperMap {
 
         for(int y = 0; y<height; y++) {
             for(int x = 0; x<width; x++) {
-                cells[y][x] = new Cell(Tile.getNameByCode(Integer.parseInt(array[y*height + x+2])));
+                cells[y][x] = new Cell(Tile.getNameByCode(Integer.parseInt(array[y*height + x+2])), new Vector2(x, y));
             }
         }
 

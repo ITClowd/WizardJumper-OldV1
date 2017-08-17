@@ -42,7 +42,7 @@ public class LevelRenderer {
         Pixmap m = new Pixmap((int)tileSize, (int)tileSize, Pixmap.Format.RGB888);
         m.setColor(Color.ROYAL);
         m.fill();
-        Texture emptytexture = new Texture(m);
+        Texture emptyTexture = new Texture(m);
 
         for(int y = 0; y<wjm.getHeight(); y++) {
             for(int x = 0; x<wjm.getWidth(); x++) {
@@ -50,14 +50,14 @@ public class LevelRenderer {
                     Tile tile = wjm.getCells()[y][x].getTile();
                     if(tile != Tile.AIR)
                         batch.draw(EdgeRecognizer.getSprite(wjm.getCells(), x, y), x*tileSize+mapLoc.getX(), y*tileSize+mapLoc.getY(), tileSize, tileSize);
-                    else batch.draw(emptytexture, x*tileSize+mapLoc.getX(), y*tileSize+mapLoc.getY(), tileSize, tileSize);
+                    else batch.draw(emptyTexture, x*tileSize+mapLoc.getX(), y*tileSize+mapLoc.getY(), tileSize, tileSize);
                 } else {
                     Gdx.app.log("LevelDraw", "Cells null");
                 }
             }
         }
 
-        drawDashedLines(batch.getProjectionMatrix(), wjm, tileSize);
+//        drawDashedLines(batch.getProjectionMatrix(), wjm, tileSize);
 
     }
 
