@@ -52,7 +52,7 @@ public class WorldHelper {
 
         //Ground shape
         ChainShape groundShape = new ChainShape();
-        groundShape.createChain(new Vector2[]{new Vector2(0, map.getHeight()), new Vector2(0, 0), new Vector2(map.getWidth(), 0), new Vector2(map.getHeight(), map.getHeight()),new Vector2(0, map.getHeight())});
+        groundShape.createChain(new Vector2[]{new Vector2(0, map.getHeight()), new Vector2(0, 0), new Vector2(map.getWidth(), 0), new Vector2(map.getWidth(), map.getHeight()),new Vector2(0, map.getHeight())});
 
         fixtureDef.shape = groundShape;
         fixtureDef.friction = 0;

@@ -46,12 +46,15 @@ public class Play implements Screen {
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch = new SpriteBatch();
 
-        world = new World(new Vector2(0, -9.81f), true);
+        world = new World(new Vector2(0, -9.81f*2), true);
         debugRenderer = new Box2DDebugRenderer();
 
         player = new Player(new Location(2, 5), world);
 
         new WorldHelper(map);
+        System.out.println("Width:" + map.getWidth());
+        System.out.println("Height:" + map.getHeight());
+
     }
 
     @Override
@@ -67,7 +70,7 @@ public class Play implements Screen {
         player.render(batch, delta);
         batch.end();
 
-//        debugRenderer.render(world, camera.combined);
+        debugRenderer.render(world, camera.combined);
         ButtonHandler.backFunc(new MainMenu());
     }
 
@@ -75,6 +78,7 @@ public class Play implements Screen {
     public void resize(int width, int height) {
         camera.viewportWidth = width/25;
         camera.viewportHeight = height/25;
+
         camera.update();
     }
 

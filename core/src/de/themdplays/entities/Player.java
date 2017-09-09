@@ -19,7 +19,7 @@ public class Player extends Entity {
 
 	private Sprite look;
 	
-	private final static float PLAYERSPEED = 200;
+	private final static float PLAYERSPEED = 400;
 
 	private TextureAtlas player_atlas;
 
@@ -86,12 +86,14 @@ public class Player extends Entity {
         if(body.getLinearVelocity().x >= 10) body.setLinearVelocity(10, body.getLinearVelocity().y);
         if(body.getLinearVelocity().x <= -10) body.setLinearVelocity(-10, body.getLinearVelocity().y);
 
+        if(velocity.x == 0) body.setLinearVelocity(0, body.getLinearVelocity().y);
+
         //Spriteanimation
 		elapsedTime += Gdx.graphics.getDeltaTime() * body.getLinearVelocity().x*10/8;
 
-		if(body.getLinearVelocity().x > 0) {
+		if(body.getLinearVelocity().x > 0.1f) {
 			look = new Sprite(walk_right.getKeyFrame(elapsedTime, true));
-		} else if(body.getLinearVelocity().x < 0) {
+		} else if(body.getLinearVelocity().x < -0.1f) {
 			look = new Sprite(walk_left.getKeyFrame(elapsedTime, true));
 		} else {
 			look = standing;
