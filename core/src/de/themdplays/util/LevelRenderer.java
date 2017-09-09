@@ -36,6 +36,47 @@ public class LevelRenderer {
      */
     public void render(SpriteBatch batch, WizardJumperMap wjm, boolean toBox2D) {
 
+        int tileSize = (int)(Constants.TILE_SIZE*zoom / (toBox2D?Constants.PIXELS_TO_METERS:1));
+
+        int startX = (int)(mapLoc.getX());
+        int startY = (int)(mapLoc.getX());
+
+        if(startX<0) startX = 0;
+        if(startY<0) startY = 0;
+
+        int endX = startX + Gdx.graphics.getWidth()/tileSize;
+        int endY = startY + Gdx.graphics.getHeight()/tileSize;
+
+        if(endX > wjm.getWidth()) endX = wjm.getWidth();
+        if(endY > wjm.getHeight()) endY = wjm.getHeight();
+
+        Pixmap m = new Pixmap(wjm.getWidth()*tileSize, wjm.getHeight()*tileSize,Pixmap.Format.RGB888);
+        m.setColor(Color.ROYAL);
+        m.fill();
+        Texture emptyTexture = new Texture(m);
+//        batch.draw(emptyTexture, mapLoc.getX(), mapLoc.getY());
+        for(int y = startY; y<endY; y++) {
+            for(int x = startX; x<endX; x++) {
+                if (wjm.getCells()[y][x] != null) {
+                    Tile tile = wjm.getCells()[y][x].getTile();
+                    if (tile != Tile.AIR)
+                        batch.draw(EdgeRecognizer.getSprite(wjm.getCells(), x, y), x * tileSize + mapLoc.getX(), y * tileSize + mapLoc.getY(), tileSize, tileSize);
+
+                    //else batch.draw(emptyTexture, x*tileSize+mapLoc.getX(), y*tileSize+mapLoc.getY(), tileSize, tileSize);
+
+                }
+            }
+        }
+
+//        drawDashedLines(batch.getProjectionMatrix(), wjm, tileSize);
+
+
+
+
+    }
+
+    @Deprecated
+    public void oldRender(SpriteBatch batch, WizardJumperMap wjm, boolean toBox2D) {
         float tileSize = Constants.TILE_SIZE*zoom / (toBox2D?Constants.PIXELS_TO_METERS:1);
 //        Pixmap m = new Pixmap((int)tileSize, (int)tileSize, Pixmap.Format.Alpha);
 
@@ -56,10 +97,8 @@ public class LevelRenderer {
                 }
             }
         }
-
-//        drawDashedLines(batch.getProjectionMatrix(), wjm, tileSize);
-
     }
+
 
     /**
      * Sets the current Zoom of the {@link LevelRenderer}

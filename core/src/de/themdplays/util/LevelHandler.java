@@ -58,7 +58,7 @@ public class LevelHandler {
     }
 
     /**
-     * @return lsit of user maps
+     * @return list of user maps
      */
     public List<WizardJumperMap> getUserMaps() {
         return userMaps;

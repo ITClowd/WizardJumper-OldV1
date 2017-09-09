@@ -162,7 +162,7 @@ public class Player extends Entity {
 
         //ballshape
         PolygonShape box = new PolygonShape();
-        box.setAsBox(0.9f,1);
+        box.setAsBox(0.9f,0.9f);
 
         //fixture def
         FixtureDef fixtureDef = new FixtureDef();

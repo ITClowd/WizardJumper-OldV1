@@ -44,7 +44,7 @@ public class Editor extends InputAdapter implements Screen {
     public void show() {
         batch = new SpriteBatch();
 
-        map = new WizardJumperMap(200, 100);
+        map = new WizardJumperMap(100, 50);
 
         maplocation = new Location(0, 0);
 
@@ -65,7 +65,7 @@ public class Editor extends InputAdapter implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         //WORLD RENDERER
-        levelRenderer.render(batch, map, false); //TO NOT CONVERT IT TO BOX2D
+        levelRenderer.oldRender(batch, map, false); //TO NOT CONVERT IT TO BOX2D
         //UI RENDERING
         editorUIRenderer.render(batch);
 

@@ -6,14 +6,15 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import de.themdplays.entities.Player;
 import de.themdplays.map.WizardJumperMap;
 import de.themdplays.screens.menu.MainMenu;
-import de.themdplays.util.*;
+import de.themdplays.util.ButtonHandler;
+import de.themdplays.util.LevelRenderer;
+import de.themdplays.util.Location;
+import de.themdplays.util.WorldHelper;
 
 public class Play implements Screen {
 
@@ -34,7 +35,6 @@ public class Play implements Screen {
 
     private Player player;
 
-
     public Play(WizardJumperMap map) {
         this.map = map;
     }
@@ -49,11 +49,9 @@ public class Play implements Screen {
         world = new World(new Vector2(0, -9.81f), true);
         debugRenderer = new Box2DDebugRenderer();
 
-
         player = new Player(new Location(2, 5), world);
 
         new WorldHelper(map);
-
     }
 
     @Override
@@ -65,7 +63,7 @@ public class Play implements Screen {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        levelRenderer.render(batch, map, true);
+        levelRenderer.oldRender(batch, map, true);
         player.render(batch, delta);
         batch.end();
 

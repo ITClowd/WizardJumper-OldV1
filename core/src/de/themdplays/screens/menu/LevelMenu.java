@@ -23,7 +23,6 @@ public class LevelMenu implements Screen {
         levelHandler = new LevelHandler();
 
         ((Game) Gdx.app.getApplicationListener()).setScreen(new Play(levelHandler.getUserMaps().get(0)));
-
     }
 
     @Override

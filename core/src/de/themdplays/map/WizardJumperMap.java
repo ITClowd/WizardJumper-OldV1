@@ -50,31 +50,31 @@ public class WizardJumperMap {
      * Compresses the map to an short string
      */
     private void compress() {
-        compressedMap = "";
-        compressedMap+=width+";" + height+";";
-        for(int y = 0; y<height; y++) {
-            for(int x = 0; x<width; x++) {
-                compressedMap+=cells[y][x].getTile().getID()+";";
+        for(int y = 0; y<cells.length; y++) {
+            for(int x = 0; x<cells[0].length; x++) {
+                compressedMap += cells[y][x].getTile().getID() + ";";
             }
+            compressedMap += ":\n";
         }
-
     }
 
     /**
      * Uncompresses a compressed string to an map
      */
     private void uncompress() {
-        String[] array = compressedMap.split(";");
-        this.width=Integer.parseInt(array[0]);
-        this.height=Integer.parseInt(array[1]);
-        cells = new Cell[height][width];
+        String[] lines = compressedMap.split(":\n");
+        cells = new Cell[lines.length][lines[0].length()];
 
-        for(int y = 0; y<height; y++) {
-            for(int x = 0; x<width; x++) {
-                cells[y][x] = new Cell(Tile.getNameByCode(Integer.parseInt(array[y*height + x+2])), new Vector2(x, y));
+        this.width = lines[0].length()/2;
+        this.height = lines.length;
+
+        for(int y = 0; y<lines.length; y++) {
+            String[] row = lines[y].split(";");
+            for(int x = 0; x<row.length; x++) {
+                int id = Integer.parseInt(row[x]);
+                cells[y][x] = new Cell(Tile.getNameByCode(id), new Vector2(x, y));
             }
         }
-
     }
 
     /**

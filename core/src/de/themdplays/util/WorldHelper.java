@@ -2,13 +2,9 @@ package de.themdplays.util;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import de.themdplays.map.Cell;
 import de.themdplays.map.Tile;
 import de.themdplays.map.WizardJumperMap;
 import de.themdplays.screens.Play;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Moritz on 22/07/2017.
@@ -23,12 +19,6 @@ public class WorldHelper {
         this.map = map;
 
         createBody();
-
-        Cell[][] cells = map.getCells();
-
-
-        List<Body> bodies = new ArrayList<Body>();
-
         PolygonShape shape = new PolygonShape();
 
         for(int y = 0; y<map.getHeight(); y++) {
