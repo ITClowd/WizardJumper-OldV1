@@ -14,13 +14,10 @@ public class LevelMenu implements Screen {
     private Stage stage;
     private ImageButton story, user;
 
-
-    private LevelHandler levelHandler;
-
     @Override
     public void show() {
         stage = new Stage();
-        levelHandler = new LevelHandler();
+        LevelHandler levelHandler = new LevelHandler();
 
         ((Game) Gdx.app.getApplicationListener()).setScreen(new Play(levelHandler.getUserMaps().get(0)));
     }

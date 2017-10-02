@@ -21,6 +21,7 @@ public class LevelRenderer {
     private Location mapLoc;
 
     private ShapeRenderer shapeRenderer;
+    private SpriteBatch batch;
 
     public LevelRenderer() {
         this.zoom = 2;
@@ -28,33 +29,36 @@ public class LevelRenderer {
         this.mapLoc = new Location(0,0);
 
         this.shapeRenderer = new ShapeRenderer();
+        batch = new SpriteBatch();
     }
 
     /**
      * Renders a WizardJumperMap
-     * @param batch
      */
-    public void render(SpriteBatch batch, WizardJumperMap wjm, boolean toBox2D) {
-
+    public void render(WizardJumperMap wjm, boolean toBox2D) {
+        batch.begin();
         int tileSize = (int)(Constants.TILE_SIZE*zoom / (toBox2D?Constants.PIXELS_TO_METERS:1));
 
-        int startX = (int)(mapLoc.getX());
-        int startY = (int)(mapLoc.getX());
+        int startX = (int)(-mapLoc.getX()/tileSize);
+        int startY = (int)(-mapLoc.getY()/tileSize);
 
         if(startX<0) startX = 0;
         if(startY<0) startY = 0;
 
-        int endX = startX + Gdx.graphics.getWidth()/tileSize;
-        int endY = startY + Gdx.graphics.getHeight()/tileSize;
+        int endX = startX + Gdx.graphics.getWidth()/tileSize+2;
+        int endY = startY + Gdx.graphics.getHeight()/tileSize+2;
 
         if(endX > wjm.getWidth()) endX = wjm.getWidth();
         if(endY > wjm.getHeight()) endY = wjm.getHeight();
 
-        Pixmap m = new Pixmap(wjm.getWidth()*tileSize, wjm.getHeight()*tileSize,Pixmap.Format.RGB888);
+        Gdx.app.log("X", startX + ", " + endX + ", " + mapLoc.getX());
+        Gdx.app.log("Y", startY + ", " + endY);
+
+        Pixmap m = new Pixmap(tileSize, tileSize, Pixmap.Format.RGB888);
         m.setColor(Color.ROYAL);
         m.fill();
         Texture emptyTexture = new Texture(m);
-//        batch.draw(emptyTexture, mapLoc.getX(), mapLoc.getY());
+        batch.draw(emptyTexture, mapLoc.getX(), mapLoc.getY());
         for(int y = startY; y<endY; y++) {
             for(int x = startX; x<endX; x++) {
                 if (wjm.getCells()[y][x] != null) {
@@ -62,17 +66,14 @@ public class LevelRenderer {
                     if (tile != Tile.AIR)
                         batch.draw(EdgeRecognizer.getSprite(wjm.getCells(), x, y), x * tileSize + mapLoc.getX(), y * tileSize + mapLoc.getY(), tileSize, tileSize);
 
-                    //else batch.draw(emptyTexture, x*tileSize+mapLoc.getX(), y*tileSize+mapLoc.getY(), tileSize, tileSize);
+                    else batch.draw(emptyTexture, x*tileSize+mapLoc.getX(), y*tileSize+mapLoc.getY(), tileSize, tileSize);
 
                 }
             }
         }
 
 //        drawDashedLines(batch.getProjectionMatrix(), wjm, tileSize);
-
-
-
-
+        batch.end();
     }
 
     @Deprecated

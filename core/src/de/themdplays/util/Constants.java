@@ -21,5 +21,4 @@ public class Constants {
 		FONT_SIZE_SMALL = Gdx.graphics.getHeight()/70;
 	}
 
-
 }

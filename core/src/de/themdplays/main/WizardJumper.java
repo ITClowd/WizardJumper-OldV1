@@ -14,14 +14,10 @@ public class WizardJumper extends Game {
 
     @Override
     public void create () {
-
-        System.out.println(Gdx.files.getLocalStoragePath());
-
-        langManager = new LanguageManager(Language.ENGLISH);
+        langManager = new LanguageManager(LanguageManager.Language.ENGLISH);
         settings = new Settings();
         //INIT ASSETS
         initDir();
-
         Assets.load();
         while(!Assets.manager.update()) {
 //            Gdx.app.log("Assets", "Loaded: " + Assets.manager.getProgress()*100 + "%");

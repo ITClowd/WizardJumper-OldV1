@@ -8,13 +8,13 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import de.themdplays.main.WizardJumper;
 import de.themdplays.screens.Editor;
+import de.themdplays.screens.menu.Options.Options;
 import de.themdplays.util.Assets;
 import de.themdplays.util.ButtonHandler;
 import de.themdplays.util.SpriteActor;
@@ -24,22 +24,20 @@ public class MainMenu implements Screen {
 	private Stage stage;
 	private Skin skin;
 	private TextButton b_play, b_options, b_editor, b_exit;
-	private Table table;
-	
-	
+
 	@Override
 	public void show() {
-		//DECLARING STUFF
+		//declaring stuff
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
         skin = Assets.manager.get(Assets.menuSkin, Skin.class);
 
-		table = new Table();
+		Table table = new Table();
 
-        //INIT MENU
+        //init menu
         registerButtons();
 		
-        //SETTING UP TABLE
+        //setup table
 		table.setFillParent(true);
 		table.center();
 
@@ -53,7 +51,7 @@ public class MainMenu implements Screen {
         ButtonHandler.addButtonToTable(b_options, table);
         ButtonHandler.addButtonToTable(b_exit, table);
 		
-		//ADDING TABLE TO STAGE
+		//adding table to stage
 		stage.addActor(table);
 
         //FADEINEFFECT
@@ -67,10 +65,7 @@ public class MainMenu implements Screen {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		if(Gdx.input.isKeyPressed(Input.Keys.F11)) {
-			Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
-		}
-
+		if(Gdx.input.isKeyPressed(Input.Keys.F11)) Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 
 		//RENDER MENU
 		stage.act();
@@ -115,7 +110,7 @@ public class MainMenu implements Screen {
         b_exit = new TextButton(WizardJumper.langManager.get("exit"), skin, "big");
 
 
-        //ADDING CLICKLISTENER
+        //ADDING CLICK LISTENER
         ButtonHandler.addClicklistener(b_play, stage, new LevelMenu());
         ButtonHandler.addClicklistener(b_editor, stage, new Editor());
         ButtonHandler.addClicklistener(b_options, stage, new Options());

@@ -1,4 +1,4 @@
-package de.themdplays.screens.menu;
+package de.themdplays.screens.menu.Options;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import de.themdplays.main.WizardJumper;
+import de.themdplays.screens.menu.MainMenu;
 import de.themdplays.util.Assets;
 import de.themdplays.util.ButtonHandler;
 

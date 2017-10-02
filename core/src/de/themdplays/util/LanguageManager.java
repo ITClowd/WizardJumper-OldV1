@@ -24,14 +24,32 @@ public class LanguageManager {
 	}
 
     /**
-     * Returns an element of the current language
      * @param key
-     * @return
+     * @return an element of the current language
      */
 	public String get(String key) {
 		JsonReader r = new JsonReader();
 		return r.parse(Gdx.files.internal("lang/" + lang.getKey() + ".lang")).getString(key);
 	}
-	
-	
+
+	public enum Language {
+
+		GERMAN("de"),
+		ENGLISH("en");
+
+		private String key;
+
+		Language(String key) {
+			this.key = key;
+		}
+
+		/**
+		 * @return key
+		 */
+		public String getKey() {
+			return key;
+		}
+
+	}
+
 }

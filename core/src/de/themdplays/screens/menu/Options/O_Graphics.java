@@ -1,4 +1,4 @@
-package de.themdplays.screens.menu;
+package de.themdplays.screens.menu.Options;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
