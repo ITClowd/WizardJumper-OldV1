@@ -64,7 +64,7 @@ public class Editor extends InputAdapter implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         //WORLD RENDERER
-        levelRenderer.render(map, false); //TO NOT CONVERT IT TO BOX2D
+        levelRenderer.render(null, map, false); //TO NOT CONVERT IT TO BOX2D
         //UI RENDERING
 
         batch.begin();

@@ -35,8 +35,14 @@ public class LevelRenderer {
     /**
      * Renders a WizardJumperMap
      */
-    public void render(WizardJumperMap wjm, boolean toBox2D) {
-        batch.begin();
+    public void render(SpriteBatch batch, WizardJumperMap wjm, boolean toBox2D) {
+        boolean b = false;
+        if(batch==null) {
+            b = true;
+            batch = this.batch;
+        }
+        else batch.begin();
+
         int tileSize = (int)(Constants.TILE_SIZE*zoom / (toBox2D?Constants.PIXELS_TO_METERS:1));
 
         int startX = (int)(-mapLoc.getX()/tileSize);
@@ -71,9 +77,7 @@ public class LevelRenderer {
                 }
             }
         }
-
-//        drawDashedLines(batch.getProjectionMatrix(), wjm, tileSize);
-        batch.end();
+        if(!b) batch.end();
     }
 
     @Deprecated
