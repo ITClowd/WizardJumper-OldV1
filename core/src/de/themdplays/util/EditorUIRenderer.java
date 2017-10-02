@@ -36,10 +36,10 @@ public class EditorUIRenderer implements Disposable {
 
         //INIT TABLE
         buttons = new Table();
-        buttons.setPosition(Gdx.graphics.getHeight()*0.04f, Gdx.graphics.getHeight()*0.5f);
+        buttons.setPosition(Gdx.graphics.getHeight() * 0.04f, Gdx.graphics.getHeight() * 0.5f);
 
         chooser = new Table();
-        chooser.setPosition(Gdx.graphics.getWidth()*0.5f, Gdx.graphics.getWidth()*0.04f);
+        chooser.setPosition(Gdx.graphics.getWidth() * 0.5f, Gdx.graphics.getWidth() * 0.04f);
 
 
         stage.addActor(buttons);
@@ -70,14 +70,14 @@ public class EditorUIRenderer implements Disposable {
 
         w_save = new Window("Save", Assets.manager.get(Assets.menuSkin, Skin.class));
 
-        w_save.setSize(Gdx.graphics.getWidth()*0.8f, Gdx.graphics.getHeight()*0.8f);
-        w_save.setPosition(Gdx.graphics.getWidth()*.5f-w_save.getWidth()*.5f, Gdx.graphics.getHeight()*.5f-w_save.getHeight()*.5f);
-        w_save.padTop(Constants.FONT_SIZE_BIG*1.2f);
+        w_save.setSize(Gdx.graphics.getWidth() * 0.8f, Gdx.graphics.getHeight() * 0.8f);
+        w_save.setPosition(Gdx.graphics.getWidth() * .5f - w_save.getWidth() * .5f, Gdx.graphics.getHeight() * .5f - w_save.getHeight() * .5f);
+        w_save.padTop(Constants.FONT_SIZE_BIG * 1.2f);
 
 
-        w_save.getTitleTable().setWidth(Gdx.graphics.getWidth()*0.8f);
+        w_save.getTitleTable().setWidth(Gdx.graphics.getWidth() * 0.8f);
 
-        w_name.setSize(Gdx.graphics.getWidth()*0.8f, Gdx.graphics.getHeight()*0.8f);
+        w_name.setSize(Gdx.graphics.getWidth() * 0.8f, Gdx.graphics.getHeight() * 0.8f);
         w_name.setAlignment(Align.center);
 
         w_save.setMovable(false);
@@ -92,6 +92,7 @@ public class EditorUIRenderer implements Disposable {
 
     /**
      * Renders the Editor UI
+     *
      * @param batch
      */
     public void render(SpriteBatch batch) {
@@ -115,13 +116,13 @@ public class EditorUIRenderer implements Disposable {
         buttons.setWidth(eraser.getWidth());
 
         //BUTTONS
-        buttons.add(pencil).spaceBottom(eraser.getHeight()+eraser.getHeight()*0.1f);
+        buttons.add(pencil).spaceBottom(eraser.getHeight() + eraser.getHeight() * 0.1f);
         buttons.row();
-        buttons.add(fill).spaceBottom(eraser.getHeight()+eraser.getHeight()*0.1f);
+        buttons.add(fill).spaceBottom(eraser.getHeight() + eraser.getHeight() * 0.1f);
         buttons.row();
-        buttons.add(eraser).spaceBottom(eraser.getHeight()+eraser.getHeight()*0.1f);
+        buttons.add(eraser).spaceBottom(eraser.getHeight() + eraser.getHeight() * 0.1f);
         buttons.row();
-        buttons.add(save).spaceBottom(eraser.getHeight()+eraser.getHeight()*0.1f);
+        buttons.add(save).spaceBottom(eraser.getHeight() + eraser.getHeight() * 0.1f);
     }
 
     /**
@@ -130,7 +131,8 @@ public class EditorUIRenderer implements Disposable {
     private void initChooser() {
         chooser.setHeight(eraser.getHeight());
         for(Tile tile : Tile.values()) {
-            if(tile.getID() != 0) chooser.add(new BlockButton(Assets.manager.get(Assets.blocksAtlas).createSprite(tile.name().toLowerCase()), tile)).space(0, eraser.getHeight()*0.1f, 0, eraser.getHeight()*0.1f);
+            if(tile.getID() != 0)
+                chooser.add(new BlockButton(Assets.manager.get(Assets.blocksAtlas).createSprite(tile.name().toLowerCase()), tile)).space(0, eraser.getHeight() * 0.1f, 0, eraser.getHeight() * 0.1f);
         }
     }
 

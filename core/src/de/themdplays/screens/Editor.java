@@ -63,6 +63,7 @@ public class Editor extends InputAdapter implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         //WORLD RENDERER
         levelRenderer.render(null, map, false); //TO NOT CONVERT IT TO BOX2D
         //UI RENDERING
@@ -70,35 +71,35 @@ public class Editor extends InputAdapter implements Screen {
         batch.begin();
         editorUIRenderer.render(batch);
 
-        if(Gdx.input.isButtonPressed(Input.Buttons.MIDDLE)&&!down) {
-            middleX = Gdx.input.getX()-(int)levelRenderer.getMapLoc().getX();
-            middleY = Gdx.graphics.getHeight()-Gdx.input.getY()-(int)levelRenderer.getMapLoc().getY();
+        if(Gdx.input.isButtonPressed(Input.Buttons.MIDDLE) && !down) {
+            middleX = Gdx.input.getX() - (int) levelRenderer.getMapLoc().getX();
+            middleY = Gdx.graphics.getHeight() - Gdx.input.getY() - (int) levelRenderer.getMapLoc().getY();
 
             down = true;
-        } else if(Gdx.input.isButtonPressed(Input.Buttons.MIDDLE)&&down) {
-            levelRenderer.setMapLoc(new Location(Gdx.input.getX()-middleX, Gdx.graphics.getHeight()-Gdx.input.getY()-middleY));
+        } else if(Gdx.input.isButtonPressed(Input.Buttons.MIDDLE) && down) {
+            levelRenderer.setMapLoc(new Location(Gdx.input.getX() - middleX, Gdx.graphics.getHeight() - Gdx.input.getY() - middleY));
         } else if(!Gdx.input.isButtonPressed(Input.Buttons.MIDDLE)) {
-            down=false;
+            down = false;
         }
 
         batch.end();
 
         if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-            float tileSize = Constants.TILE_SIZE*levelRenderer.getZoom();
-            int translatedX = (int)((Gdx.input.getX()-levelRenderer.getMapLoc().getX())/tileSize);
-            int translatedY = (int)((Gdx.graphics.getHeight()-Gdx.input.getY()-levelRenderer.getMapLoc().getY())/tileSize);
+            float tileSize = Constants.TILE_SIZE * levelRenderer.getZoom();
+            int translatedX = (int) ((Gdx.input.getX() - levelRenderer.getMapLoc().getX()) / tileSize);
+            int translatedY = (int) ((Gdx.graphics.getHeight() - Gdx.input.getY() - levelRenderer.getMapLoc().getY()) / tileSize);
 
-            if(Gdx.input.getY()<=Gdx.graphics.getHeight()&&
+            if(Gdx.input.getY() <= Gdx.graphics.getHeight() &&
                     //BOUNDS
-                    translatedY>=0&&
-                    translatedY<map.getHeight()&&
-                    translatedX>=0&&
-                    translatedX<map.getWidth()&&
-                    Gdx.input.getX()>=editorUIRenderer.getButtons().getWidth()+editorUIRenderer.getButtons().getX()+Gdx.graphics.getWidth()*0.04f&&
-                    Gdx.input.getY()<=Gdx.graphics.getHeight()-(editorUIRenderer.getChooser().getHeight()+editorUIRenderer.getChooser().getY()+Gdx.graphics.getWidth()*0.04f)) {
+                    translatedY >= 0 &&
+                    translatedY < map.getHeight() &&
+                    translatedX >= 0 &&
+                    translatedX < map.getWidth() &&
+                    Gdx.input.getX() >= editorUIRenderer.getButtons().getWidth() + editorUIRenderer.getButtons().getX() + Gdx.graphics.getWidth() * 0.04f &&
+                    Gdx.input.getY() <= Gdx.graphics.getHeight() - (editorUIRenderer.getChooser().getHeight() + editorUIRenderer.getChooser().getY() + Gdx.graphics.getWidth() * 0.04f)) {
 
 
-                Cell[] [] tmp = map.getCells();
+                Cell[][] tmp = map.getCells();
 
                 switch(tool) {
                     case PENCIL:
@@ -106,7 +107,7 @@ public class Editor extends InputAdapter implements Screen {
                             List<Cell> c = new ArrayList<Cell>();
                             c.add(tmp[translatedY][translatedX]);
                             changes.add(c);
-                            tmp[translatedY] [translatedX] = new Cell(currentTile, new Vector2(translatedX, translatedY));
+                            tmp[translatedY][translatedX] = new Cell(currentTile, new Vector2(translatedX, translatedY));
                             map.setCells(tmp);
                         }
                         break;
@@ -119,7 +120,7 @@ public class Editor extends InputAdapter implements Screen {
                         break;
                     case FILL:
                         if(map.getCells()[translatedY][translatedX].getTile() != currentTile) {
-                            Tile tile =   map.getCells()[translatedY][translatedX].getTile();
+                            Tile tile = map.getCells()[translatedY][translatedX].getTile();
                             filltmp = tile;
                             map.setCells(floodQueueFill(map.getCells(), translatedX, translatedY, tile));
                         }
@@ -138,7 +139,7 @@ public class Editor extends InputAdapter implements Screen {
                 List<Cell> tmp = changes.remove();
                 Cell[][] celltmp = map.getCells();
                 for(Cell cell : tmp) {
-                    celltmp[(int)cell.getLocation().y][(int)cell.getLocation().x] = cell;
+                    celltmp[(int) cell.getLocation().y][(int) cell.getLocation().x] = cell;
                 }
                 map.setCells(celltmp);
             }
@@ -150,10 +151,10 @@ public class Editor extends InputAdapter implements Screen {
     @Override
     public boolean scrolled(int amount) {
 
-        float newZoom = levelRenderer.getZoom()+(-amount*0.2f);
+        float newZoom = levelRenderer.getZoom() + (-amount * 0.2f);
 
-        float x = Gdx.graphics.getWidth()/2 + (levelRenderer.getMapLoc().getX() - Gdx.graphics.getWidth()/2) * (float) newZoom / (float) levelRenderer.getZoom();
-        float y = Gdx.graphics.getHeight()/2 + (levelRenderer.getMapLoc().getY() - Gdx.graphics.getHeight()/2) * (float) newZoom / (float) levelRenderer.getZoom();
+        float x = Gdx.graphics.getWidth() / 2 + (levelRenderer.getMapLoc().getX() - Gdx.graphics.getWidth() / 2) * (float) newZoom / (float) levelRenderer.getZoom();
+        float y = Gdx.graphics.getHeight() / 2 + (levelRenderer.getMapLoc().getY() - Gdx.graphics.getHeight() / 2) * (float) newZoom / (float) levelRenderer.getZoom();
 
         levelRenderer.setMapLoc(new Location(x, y));
 
@@ -168,6 +169,7 @@ public class Editor extends InputAdapter implements Screen {
 
     /**
      * Sets the editor Tool to tool
+     *
      * @param tool
      */
     public static void setTool(EditorTools tool) {
@@ -184,6 +186,7 @@ public class Editor extends InputAdapter implements Screen {
 
     /**
      * Sets the tile to draw with
+     *
      * @param currentTile
      */
     public static void setCurrentTile(Tile currentTile) {
@@ -199,6 +202,7 @@ public class Editor extends InputAdapter implements Screen {
 
     /**
      * Improved FloodFill function using queues
+     *
      * @param map
      * @param x
      * @param y
@@ -215,17 +219,18 @@ public class Editor extends InputAdapter implements Screen {
         int iterations = 0;
         List<Cell> c = new ArrayList<Cell>();
 
-        while (!queue.isEmpty()) {
+        while(!queue.isEmpty()) {
             Point p = queue.remove();
             if(map[p.y][p.x].getTile() == clickedTile && map[p.y][p.x].getTile() != currentTile) {
                 iterations++;
                 c.add(map[p.y][p.x]);
 
                 map[p.y][p.x] = new Cell(currentTile, new Vector2(p.x, p.y));
-                if(p.x>0)                    queue.add(new Point(p.x-1, p.y));
-                if(p.x<this.map.getWidth()-1)   queue.add(new Point(p.x+1, p.y));
-                if(p.y>0)                    queue.add(new Point(p.x, p.y-1));
-                if(p.y<this.map.getHeight()-1)  queue.add(new Point(p.x, p.y+1));
+                if(p.x > 0) queue.add(new Point(p.x - 1, p.y));
+                if(p.x < this.map.getWidth() - 1) queue.add(new Point(p.x + 1, p.y));
+                if(p.y > 0) queue.add(new Point(p.x, p.y - 1));
+                if(p.y < this.map.getHeight() - 1) queue.add(new Point(p.x, p.y + 1));
+
             }
         }
         changes.add(c);
@@ -235,6 +240,7 @@ public class Editor extends InputAdapter implements Screen {
 
     /**
      * Saves the map
+     *
      * @param name
      */
     public static void saveMap(String name) {
