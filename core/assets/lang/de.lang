@@ -6,5 +6,7 @@
 	"game": "Spiel",
 	"back": "Zurück",
 	"editor": "Editor",
-	"exit": "Schließen"
+	"exit": "Schliessen",
+	"save": "Speichern",
+	"name": "Name"
 }

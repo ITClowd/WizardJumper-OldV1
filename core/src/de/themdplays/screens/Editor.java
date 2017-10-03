@@ -70,18 +70,7 @@ public class Editor extends InputAdapter implements Screen {
 
         batch.begin();
         editorUIRenderer.render(batch);
-
-        if(Gdx.input.isButtonPressed(Input.Buttons.MIDDLE) && !down) {
-            middleX = Gdx.input.getX() - (int) levelRenderer.getMapLoc().getX();
-            middleY = Gdx.graphics.getHeight() - Gdx.input.getY() - (int) levelRenderer.getMapLoc().getY();
-
-            down = true;
-        } else if(Gdx.input.isButtonPressed(Input.Buttons.MIDDLE) && down) {
-            levelRenderer.setMapLoc(new Location(Gdx.input.getX() - middleX, Gdx.graphics.getHeight() - Gdx.input.getY() - middleY));
-        } else if(!Gdx.input.isButtonPressed(Input.Buttons.MIDDLE)) {
-            down = false;
-        }
-
+        handleMiddleClickMovement();
         batch.end();
 
         if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
@@ -130,6 +119,22 @@ public class Editor extends InputAdapter implements Screen {
         }
 
         ButtonHandler.backFunc(new MainMenu());
+    }
+
+    /**
+     * Handles the middleclick movement
+     */
+    private void handleMiddleClickMovement() {
+        if(Gdx.input.isButtonPressed(Input.Buttons.MIDDLE) && !down) {
+            middleX = Gdx.input.getX() - (int) levelRenderer.getMapLoc().getX();
+            middleY = Gdx.graphics.getHeight() - Gdx.input.getY() - (int) levelRenderer.getMapLoc().getY();
+
+            down = true;
+        } else if(Gdx.input.isButtonPressed(Input.Buttons.MIDDLE) && down) {
+            levelRenderer.setMapLoc(new Location(Gdx.input.getX() - middleX, Gdx.graphics.getHeight() - Gdx.input.getY() - middleY));
+        } else if(!Gdx.input.isButtonPressed(Input.Buttons.MIDDLE)) {
+            down = false;
+        }
     }
 
     @Override

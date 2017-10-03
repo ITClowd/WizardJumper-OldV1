@@ -13,6 +13,13 @@ public class EdgeRecognizer {
 
     private static Tile target;
 
+    /**
+     * Returns the correct sprite for edges
+     * @param cells
+     * @param x
+     * @param y
+     * @return edgeSprite
+     */
     public static Sprite getSprite(Cell[][] cells, int x, int y) {
 
         target = cells[y][x].getTile();
@@ -133,7 +140,6 @@ public class EdgeRecognizer {
     private static boolean isBottomSame(Cell[][] cells, int x, int y) {
         return isSame(cells, x, y-1);
     }
-
 
     /**
      * @param cells map cells

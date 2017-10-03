@@ -6,5 +6,7 @@
 	"game": "Game",
 	"back": "Back",
 	"editor": "Editor",
-	"exit": "Exit"
+	"exit": "Exit",
+	"save": "Save",
+	"name": "Name"
 }

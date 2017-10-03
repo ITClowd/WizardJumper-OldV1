@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
+import de.themdplays.main.WizardJumper;
 import de.themdplays.map.Tile;
 import de.themdplays.screens.Editor;
 import de.themdplays.screens.menu.MainMenu;
@@ -30,7 +31,6 @@ public class EditorUIRenderer implements Disposable {
     private TextField w_name;
     private TextButton w_bsave;
 
-
     public EditorUIRenderer() {
         stage = new Stage();
 
@@ -41,25 +41,21 @@ public class EditorUIRenderer implements Disposable {
         chooser = new Table();
         chooser.setPosition(Gdx.graphics.getWidth() * 0.5f, Gdx.graphics.getWidth() * 0.04f);
 
-
         stage.addActor(buttons);
         stage.addActor(chooser);
         initButtons();
         initChooser();
 
         initSaveWindow();
-
-
     }
 
     /**
      * Initializes the save window object and adds it to the stage object
      */
     private void initSaveWindow() {
-
         w_name = new TextField("", Assets.manager.get(Assets.menuSkin, Skin.class));
 
-        w_bsave = new TextButton("Save", Assets.manager.get(Assets.menuSkin, Skin.class), "big");
+        w_bsave = new TextButton(WizardJumper.langManager.get("save"), Assets.manager.get(Assets.menuSkin, Skin.class), "big");
 
         w_bsave.addListener(new ClickListener() {
             @Override
@@ -68,7 +64,7 @@ public class EditorUIRenderer implements Disposable {
             }
         });
 
-        w_save = new Window("Save", Assets.manager.get(Assets.menuSkin, Skin.class));
+        w_save = new Window(WizardJumper.langManager.get("save"), Assets.manager.get(Assets.menuSkin, Skin.class));
 
         w_save.setSize(Gdx.graphics.getWidth() * 0.8f, Gdx.graphics.getHeight() * 0.8f);
         w_save.setPosition(Gdx.graphics.getWidth() * .5f - w_save.getWidth() * .5f, Gdx.graphics.getHeight() * .5f - w_save.getHeight() * .5f);
@@ -81,7 +77,7 @@ public class EditorUIRenderer implements Disposable {
         w_name.setAlignment(Align.center);
 
         w_save.setMovable(false);
-        w_save.add(new Label("Name", Assets.manager.get(Assets.menuSkin, Skin.class), "big")).row();
+        w_save.add(new Label(WizardJumper.langManager.get("name"), Assets.manager.get(Assets.menuSkin, Skin.class), "big")).row();
         w_save.add(w_name).row();
         w_save.add(w_bsave).align(Align.bottom);
         w_save.getTitleLabel().setAlignment(Align.center);
