@@ -65,8 +65,8 @@ public class Play implements Screen {
         world.step(TIMESTEP, VELOCITYITERATIONS, POSITIONIITERATIONS);
 
         batch.setProjectionMatrix(camera.combined);
-        levelRenderer.render(batch, map, true);
         batch.begin();
+        levelRenderer.render(batch, map, true);
         player.render(batch, delta);
         batch.end();
 

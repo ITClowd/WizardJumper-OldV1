@@ -40,7 +40,8 @@ public class LevelRenderer {
         if(batch == null) {
             b = true;
             batch = this.batch;
-        } else batch.begin();
+            batch.begin();
+        }
 
         int tileSize = (int) (Constants.TILE_SIZE * zoom / (toBox2D ? Constants.PIXELS_TO_METERS : 1));
 
@@ -74,32 +75,7 @@ public class LevelRenderer {
                 }
             }
         }
-        if(!b) batch.end();
-    }
-
-    @Deprecated
-    public void oldRender(SpriteBatch batch, WizardJumperMap wjm, boolean toBox2D) {
-        float tileSize = Constants.TILE_SIZE * zoom / (toBox2D ? Constants.PIXELS_TO_METERS : 1);
-//        Pixmap m = new Pixmap((int)tileSize, (int)tileSize, Pixmap.Format.Alpha);
-
-        Pixmap m = new Pixmap((int) tileSize, (int) tileSize, Pixmap.Format.RGB888);
-        m.setColor(Color.ROYAL);
-        m.fill();
-        Texture emptyTexture = new Texture(m);
-
-        for(int y = 0; y < wjm.getHeight(); y++) {
-            for(int x = 0; x < wjm.getWidth(); x++) {
-                if(wjm.getCells()[y][x] != null) {
-                    Tile tile = wjm.getCells()[y][x].getTile();
-                    if(tile != Tile.AIR)
-                        batch.draw(EdgeRecognizer.getSprite(wjm.getCells(), x, y), x * tileSize + mapLoc.getX(), y * tileSize + mapLoc.getY(), tileSize, tileSize);
-                    else
-                        batch.draw(emptyTexture, x * tileSize + mapLoc.getX(), y * tileSize + mapLoc.getY(), tileSize, tileSize);
-                } else {
-                    Gdx.app.log("LevelDraw", "Cells null");
-                }
-            }
-        }
+        if(b) batch.end();
     }
 
     /**
@@ -139,8 +115,8 @@ public class LevelRenderer {
     /**
      * Draws dashed lines when in editor
      */
-    public void drawDashedLines(Matrix4 projectionmatrix, WizardJumperMap wjm, float tileSize) {
-        shapeRenderer.setProjectionMatrix(projectionmatrix);
+    public void drawDashedLines(Matrix4 projectionMatrix, WizardJumperMap wjm, float tileSize) {
+        shapeRenderer.setProjectionMatrix(projectionMatrix);
         for(int i = 0; i < Gdx.graphics.getWidth() / tileSize; i++) {
 //            shapeRenderer.line(i*tileSize+(mapLoc.getX()%tileSize), 0, i*tileSize+(mapLoc.getX()%tileSize), Gdx.graphics.getHeight());
             drawDottedLine(shapeRenderer, (int) tileSize / 4, i * tileSize + (mapLoc.getX() % tileSize), mapLoc.getY() % tileSize, i * tileSize + (mapLoc.getX() % tileSize), Gdx.graphics.getHeight());
