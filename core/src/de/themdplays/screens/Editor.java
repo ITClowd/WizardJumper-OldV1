@@ -40,6 +40,8 @@ public class Editor extends InputAdapter implements Screen {
     private Tile filltmp;
     private Queue<List<Cell>> changes = new LinkedList<List<Cell>>();
 
+    private Queue<Point> tiles = new LinkedList<Point>();
+
     @Override
     public void show() {
         batch = new SpriteBatch();
@@ -78,6 +80,7 @@ public class Editor extends InputAdapter implements Screen {
             int translatedX = (int) ((Gdx.input.getX() - levelRenderer.getMapLoc().getX()) / tileSize);
             int translatedY = (int) ((Gdx.graphics.getHeight() - Gdx.input.getY() - levelRenderer.getMapLoc().getY()) / tileSize);
 
+
             if(Gdx.input.getY() <= Gdx.graphics.getHeight() &&
                     //BOUNDS
                     translatedY >= 0 &&
@@ -87,25 +90,29 @@ public class Editor extends InputAdapter implements Screen {
                     Gdx.input.getX() >= editorUIRenderer.getButtons().getWidth() + editorUIRenderer.getButtons().getX() + Gdx.graphics.getWidth() * 0.04f &&
                     Gdx.input.getY() <= Gdx.graphics.getHeight() - (editorUIRenderer.getChooser().getHeight() + editorUIRenderer.getChooser().getY() + Gdx.graphics.getWidth() * 0.04f)) {
 
+                double distance = Math.sqrt(Math.pow(Math.abs(translatedX-oldTranslatedX), 2)+ Math.pow(Math.abs(translatedY-oldTranslatedY), 2));
+                if(distance>1 && oldTranslatedX!=-1) {
+                    addLinePoints(translatedX, translatedY, oldTranslatedX, oldTranslatedY);
+                } else tiles.add(new Point(translatedX, translatedY));
 
                 Cell[][] tmp = map.getCells();
 
                 switch(tool) {
                     case PENCIL:
                         if(map.getCells()[translatedY][translatedX].getTile() != currentTile) {
-                            List<Cell> c = new ArrayList<Cell>();
-                            c.add(tmp[translatedY][translatedX]);
-                            changes.add(c);
-                            tmp[translatedY][translatedX] = new Cell(currentTile, new Vector2(translatedX, translatedY));
-                            map.setCells(tmp);
+                            while(!tiles.isEmpty()) {
+                                Point p = tiles.remove();
+                                tmp[p.y][p.x] = new Cell(currentTile, new Vector2(p.y, p.x));
+                                map.setCells(tmp);
+                            }
                         }
                         break;
                     case ERASER:
-                        List<Cell> c = new ArrayList<Cell>();
-                        c.add(tmp[translatedY][translatedX]);
-                        changes.add(c);
-                        tmp[translatedY][translatedX] = new Cell(Tile.AIR, new Vector2(translatedX, translatedY));
-                        map.setCells(tmp);
+                        while(!tiles.isEmpty()) {
+                            Point p = tiles.remove();
+                            tmp[p.y][p.x] = new Cell(Tile.AIR, new Vector2(p.y, p.x));
+                            map.setCells(tmp);
+                        }
                         break;
                     case FILL:
                         if(map.getCells()[translatedY][translatedX].getTile() != currentTile) {
@@ -116,9 +123,64 @@ public class Editor extends InputAdapter implements Screen {
                         break;
                 }
             }
+            oldTranslatedX = translatedX;
+            oldTranslatedY = translatedY;
+        } else {
+            oldTranslatedX = -1;
         }
 
         ButtonHandler.backFunc(new MainMenu());
+    }
+
+
+    private void addLinePoints(int x0, int y0, int x1, int y1) {
+        boolean steep = Math.abs(y1-y0) > Math.abs(x1-x0);
+
+        if(steep) {
+            //swap x and y
+            int tmp = x0;
+            x0 = y0;
+            y0 = tmp;
+
+            tmp = x1;
+            x1 = y1;
+            y1 = tmp;
+        }
+        if(x0>x1) {
+            //swap 0 and 1
+            int tmp = x0;
+            x0 = x1;
+            x1=tmp;
+
+            tmp = y0;
+            y0 = y1;
+            y1=tmp;
+        }
+
+        int dx, dy;
+        dx = x1 - x0;
+        dy = Math.abs(y1-x0);
+
+        int err = dx/2;
+        int ystep;
+        if(y0<y1)
+            ystep = 1;
+        else
+            ystep = -1;
+
+        for(; x0 <= x1; x0++) {
+            if(y0>=0&&x0>=0)
+                if(steep)
+                    tiles.add(new Point(y0, x0));
+                else
+                    tiles.add(new Point(x0, y0));
+        }
+        err -= dy;
+        if(err<0) {
+            y0+= ystep;
+            err+=dx;
+        }
+
     }
 
     /**
@@ -238,7 +300,6 @@ public class Editor extends InputAdapter implements Screen {
 
             }
         }
-        changes.add(c);
         Gdx.app.log("Fill", "Blocks filled: " + iterations);
         return map;
     }
