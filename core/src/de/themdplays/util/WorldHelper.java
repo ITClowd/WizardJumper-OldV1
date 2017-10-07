@@ -1,5 +1,6 @@
 package de.themdplays.util;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import de.themdplays.map.Tile;
@@ -19,6 +20,11 @@ public class WorldHelper {
         this.map = map;
 
         createBody();
+        createMapBodies();
+    }
+
+    @Deprecated
+    private void createMapBodiesOld() {
         PolygonShape shape = new PolygonShape();
 
         for(int y = 0; y<map.getHeight(); y++) {
@@ -32,7 +38,29 @@ public class WorldHelper {
                 }
             }
         }
+        shape.dispose();
+    }
 
+
+    private void createMapBodies() {
+        PolygonShape shape = new PolygonShape();
+        for(int y = 0; y<map.getHeight(); y++) {
+            int oldX = -1, startX = -1;
+            for(int x = 0; x<map.getWidth(); x++) {
+                if(map.getCells()[y][x] != null) {
+                    Tile tile = map.getCells()[y][x].getTile();
+                    if(tile != Tile.AIR) {
+                        oldX = x;
+                    } else {
+                        if(x-1 == oldX) {
+                            shape.setAsBox((oldX-startX)/2f, .5f, new Vector2(oldX-(oldX-startX)/2f+1, y+.5f), 0);
+                            level.createFixture(shape, 0);
+                        }
+                        startX = x;
+                    }
+                }
+            }
+        }
         shape.dispose();
     }
 
