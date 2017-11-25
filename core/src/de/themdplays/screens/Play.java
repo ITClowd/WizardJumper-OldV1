@@ -70,7 +70,7 @@ public class Play implements Screen {
         player.render(batch, delta);
         batch.end();
 
-        debugRenderer.render(world, camera.combined);
+//        debugRenderer.render(world, camera.combined);
         ButtonHandler.backFunc(new MainMenu());
     }
 

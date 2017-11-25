@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import de.themdplays.map.Cell;
 import de.themdplays.map.Tile;
-import de.themdplays.map.WizardJumperMap;
 
 /**
  * Created by moritz on 25.07.17.
@@ -20,9 +19,10 @@ public class EdgeRecognizer {
      * @param y
      * @return edgeSprite
      */
-    public static Sprite getSprite(Cell[][] cells, int x, int y) {
+    public static Sprite getSprite(Cell[][] cells, int x, int y, Tile tile) {
 
-        target = cells[y][x].getTile();
+        if(tile == null) target = cells[y][x].getTile();
+        else target = tile;
 
         TextureAtlas blockatlas = Assets.manager.get(Assets.blocksAtlas);
 

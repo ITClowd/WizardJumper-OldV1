@@ -16,7 +16,7 @@ import de.themdplays.map.WizardJumperMap;
  */
 public class LevelRenderer {
 
-    private float zoom;
+    private double zoom;
 
     private Location mapLoc;
 
@@ -67,7 +67,7 @@ public class LevelRenderer {
                 if(wjm.getCells()[y][x] != null) {
                     Tile tile = wjm.getCells()[y][x].getTile();
                     if(tile != Tile.AIR)
-                        batch.draw(EdgeRecognizer.getSprite(wjm.getCells(), x, y), x * tileSize + mapLoc.getX(), y * tileSize + mapLoc.getY(), tileSize, tileSize);
+                        batch.draw(EdgeRecognizer.getSprite(wjm.getCells(), x, y, null), x * tileSize + mapLoc.getX(), y * tileSize + mapLoc.getY(), tileSize, tileSize);
 
                     else
                         batch.draw(emptyTexture, x * tileSize + mapLoc.getX(), y * tileSize + mapLoc.getY(), tileSize, tileSize);
@@ -81,7 +81,7 @@ public class LevelRenderer {
     /**
      * @return float zoom
      */
-    public float getZoom() {
+    public double getZoom() {
         return zoom;
     }
 
@@ -90,10 +90,12 @@ public class LevelRenderer {
      *
      * @param zoom
      */
-    public void setZoom(float zoom) {
+    public void setZoom(double zoom) {
         if(zoom < 1) this.zoom = 1;
+        else if(zoom > 4) this.zoom = 4;
             //TODO ADD ZOOM LIMIT
-        else this.zoom = zoom;
+        else this.zoom = Util.round(zoom, 1);
+        System.out.println(this.zoom);
     }
 
     /**
