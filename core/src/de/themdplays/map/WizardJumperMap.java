@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import de.themdplays.entities.Entity;
 import de.themdplays.util.Location;
 
+import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,14 +27,14 @@ public class WizardJumperMap {
      * @param width width of the map
      * @param height height of the map
      */
-    public WizardJumperMap(int width, int height) {
-        cells = new Cell[height][width];
-        for(Cell[] row : cells) {
-            Arrays.fill(row, new Cell(Tile.AIR, new Vector2(0, 0)));
-        }
-        this.width = width;
-        this.height = height;
-    }
+//    public WizardJumperMap(int width, int height) {
+//        cells = new Cell[height][width];
+//        for(Cell[] row : cells) {
+//            Arrays.fill(row, new Cell(Tile.AIR, new Vector2(0, 0)));
+//        }
+//        this.width = width;
+//        this.height = height;
+//    }
 
     /**
      * Loads the map from the given filehandle and sets the name to the given string
@@ -72,7 +73,7 @@ public class WizardJumperMap {
             String[] row = lines[y].split(";");
             for(int x = 0; x<row.length; x++) {
                 int id = Integer.parseInt(row[x]);
-                cells[y][x] = new Cell(Tile.getNameByCode(id), new Vector2(x, y));
+                cells[y][x] = new Cell(Tile.getNameByCode(id), new Point(x, y));
             }
         }
     }

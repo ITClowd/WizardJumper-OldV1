@@ -19,6 +19,7 @@ public class EdgeRecognizer {
      * @param y
      * @return edgeSprite
      */
+    @Deprecated
     public static Sprite getSprite(Cell[][] cells, int x, int y, Tile tile) {
 
         if(tile == null) target = cells[y][x].getTile();
@@ -79,6 +80,18 @@ public class EdgeRecognizer {
         }
         else return blockatlas.createSprite(target.name().toLowerCase());
     }
+
+    public static Sprite getSprite(Cell c) {
+        if(c.getTile().isEdge()) return Assets.manager.get(Assets.blocksAtlas).createSprite(c.getTile().name().toLowerCase(), c.getTileVariation());
+        else return Assets.manager.get(Assets.blocksAtlas).createSprite(c.getTile().name().toLowerCase());
+    }
+
+    public static Sprite getSprite(Tile t, int variation) {
+        if(t.isEdge()) return Assets.manager.get(Assets.blocksAtlas).createSprite(t.name().toLowerCase(), variation);
+        else return Assets.manager.get(Assets.blocksAtlas).createSprite(t.name().toLowerCase());
+    }
+
+
 
     /**
      * @param cells map cells

@@ -1,7 +1,6 @@
 package de.themdplays.main.desktop;
 
 import com.badlogic.gdx.Files.FileType;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
@@ -26,15 +25,15 @@ public class DesktopLauncher {
 //        cfg.height = LwjglApplicationConfiguration.getDesktopDisplayMode().height;
 		cfg.fullscreen = false;
 		cfg.resizable = false;
-		
+
 		boolean PACKER = false;
-		
+
 		if(PACKER) {
 			Settings s = new Settings();
 			s.edgePadding = true;
 			s.paddingX = 2;
 			s.paddingY = 2;
-		
+
 			TexturePacker.process("/home/moritz/dirt/", "/home/moritz/dirt/packer/", "blocks");
 		}
 

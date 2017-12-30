@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import de.themdplays.entities.Player;
-import de.themdplays.map.WizardJumperMap;
+import de.themdplays.map.WJMap;
 import de.themdplays.screens.menu.MainMenu;
 import de.themdplays.util.ButtonHandler;
 import de.themdplays.util.LevelRenderer;
@@ -18,7 +18,7 @@ import de.themdplays.util.WorldHelper;
 
 public class Play implements Screen {
 
-    private WizardJumperMap map;
+    private WJMap map;
     private LevelRenderer levelRenderer;
 
     private SpriteBatch batch;
@@ -28,14 +28,12 @@ public class Play implements Screen {
 
     public static OrthographicCamera camera;
 
-    private final float pixelsToMeters = 32;
-
     private final float TIMESTEP = 1/60f;
     private final int VELOCITYITERATIONS = 8, POSITIONIITERATIONS = 3;
 
     private Player player;
 
-    public Play(WizardJumperMap map) {
+    public Play(WJMap map) {
         this.map = map;
     }
 
@@ -52,9 +50,6 @@ public class Play implements Screen {
         player = new Player(new Location(2, 5), world);
 
         new WorldHelper(map);
-        System.out.println("Width:" + map.getWidth());
-        System.out.println("Height:" + map.getHeight());
-
     }
 
     @Override

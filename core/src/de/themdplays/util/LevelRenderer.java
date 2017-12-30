@@ -8,7 +8,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
+import de.themdplays.map.Cell;
 import de.themdplays.map.Tile;
+import de.themdplays.map.WJMap;
 import de.themdplays.map.WizardJumperMap;
 
 /**
@@ -35,6 +37,7 @@ public class LevelRenderer {
     /**
      * Renders a WizardJumperMap
      */
+    @Deprecated
     public void render(SpriteBatch batch, WizardJumperMap wjm, boolean toBox2D) {
         boolean b = false;
         if(batch == null) {
@@ -74,6 +77,27 @@ public class LevelRenderer {
 
                 }
             }
+        }
+        if(b) batch.end();
+    }
+
+    public void render(SpriteBatch batch, WJMap wjm, boolean toBox2D) {
+        boolean b = false;
+        if(batch == null) {
+            b = true;
+            batch = this.batch;
+            batch.begin();
+        }
+        int tileSize = (int) (Constants.TILE_SIZE * zoom / (toBox2D ? Constants.PIXELS_TO_METERS : 1));
+
+        Pixmap m = new Pixmap(tileSize, tileSize, Pixmap.Format.RGB888);
+        m.setColor(Color.ROYAL);
+        m.fill();
+        Texture emptyTexture = new Texture(m);
+        batch.draw(emptyTexture, mapLoc.getX(), mapLoc.getY());
+
+        for(Cell c : wjm.getCellHash().values()) {
+            batch.draw(EdgeRecognizer.getSprite(c), c.getLocation().x*tileSize + mapLoc.getX(), c.getLocation().y*tileSize+mapLoc.getY(), tileSize, tileSize);
         }
         if(b) batch.end();
     }

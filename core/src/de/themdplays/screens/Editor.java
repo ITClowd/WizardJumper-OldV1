@@ -8,18 +8,18 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import de.themdplays.map.Cell;
 import de.themdplays.map.Tile;
+import de.themdplays.map.WJMap;
 import de.themdplays.map.WizardJumperMap;
 import de.themdplays.screens.menu.MainMenu;
 import de.themdplays.util.*;
 import de.themdplays.util.ui.EditorTools;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
-import java.util.Queue;
 
 /**
  * Created by Moritz on 30.12.2016.
@@ -27,7 +27,7 @@ import java.util.Queue;
 public class Editor extends InputAdapter implements Screen {
 
     private SpriteBatch batch;
-    private static WizardJumperMap map;
+    private static WJMap map;
     private static EditorTools tool;
     private static Tile currentTile;
     private static boolean changedTool = false;
@@ -47,7 +47,7 @@ public class Editor extends InputAdapter implements Screen {
     public void show() {
         batch = new SpriteBatch();
 
-        map = new WizardJumperMap(100, 50);
+        map = new WJMap();
 
         maplocation = new Location(0, 0);
 
@@ -61,6 +61,78 @@ public class Editor extends InputAdapter implements Screen {
         Gdx.input.setInputProcessor(new InputMultiplexer(this, editorUIRenderer.getStage()));
     }
 
+//    @Override
+//    public void render(float delta) {
+//        Gdx.gl.glClearColor(0, 0, 0, 1);
+//        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+//
+//        //WORLD RENDERER
+////        levelRenderer.render(null, map, false); //TO NOT CONVERT IT TO BOX2D
+//        //UI RENDERING
+//
+//        batch.begin();
+//        editorUIRenderer.render(batch);
+//        handleMiddleClickMovement();
+//        batch.end();
+//
+//        double tileSize = Constants.TILE_SIZE * levelRenderer.getZoom();
+//        Point translatedLocation = getTranslatedMousePosition(tileSize);
+//
+//        if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+//
+//            if(isInBounds(translatedLocation)) {
+//
+//                if(getDistanceSinceLastClick(translatedLocation)>1 && oldTranslatedX!=-1)
+//                    addLinePoints(translatedLocation.x, translatedLocation.y, oldTranslatedX, oldTranslatedY);
+//                else
+//                    tiles.add(new Point(translatedLocation.x, translatedLocation.y));
+//
+//                Cell[][] tmp = map.getCells();
+//
+//                switch(tool) {
+//                    case PENCIL:
+//                        if(map.getCells()[translatedLocation.y][translatedLocation.x].getTile() != currentTile) {
+//                            while(!tiles.isEmpty()) {
+//                                Point p = tiles.remove();
+//                                tmp[p.y][p.x] = new Cell(currentTile, new Vector2(p.y, p.x));
+//                                map.setCells(tmp);
+//                            }
+//                        }
+//                        break;
+//                    case ERASER:
+//                        while(!tiles.isEmpty()) {
+//                            Point p = tiles.remove();
+//                            tmp[p.y][p.x] = new Cell(Tile.AIR, new Vector2(p.y, p.x));
+//                            map.setCells(tmp);
+//                        }
+//                        break;
+//                    case FILL:
+//                        if(map.getCells()[translatedLocation.y][translatedLocation.x].getTile() != currentTile) {
+//                            Tile tile = map.getCells()[translatedLocation.y][translatedLocation.x].getTile();
+//                            filltmp = tile;
+//                            map.setCells(floodQueueFill(map.getCells(), translatedLocation.x, translatedLocation.y, tile));
+//                        }
+//                        break;
+//                }
+//            }
+//            oldTranslatedX = translatedLocation.x;
+//            oldTranslatedY = translatedLocation.y;
+//        } else
+//            oldTranslatedX = -1;
+//
+//        batch.begin();
+//        Sprite sprite = EdgeRecognizer.getSprite(map.getCells(), translatedLocation.x, translatedLocation.y, currentTile);
+//        float alpha = 0.5f;
+//        batch.setColor(sprite.getColor().r, sprite.getColor().g, sprite.getColor().b, alpha);
+//        batch.draw(sprite,
+//                Math.round(translatedLocation.x*tileSize+levelRenderer.getMapLoc().getX()),
+//                Math.round(translatedLocation.y*tileSize+levelRenderer.getMapLoc().getY()), (int)tileSize, (int)tileSize);
+//        batch.end();
+//
+//        ButtonHandler.backFunc(new MainMenu());
+//    }
+
+
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -68,8 +140,8 @@ public class Editor extends InputAdapter implements Screen {
 
         //WORLD RENDERER
         levelRenderer.render(null, map, false); //TO NOT CONVERT IT TO BOX2D
-        //UI RENDERING
 
+        //UI RENDERING
         batch.begin();
         editorUIRenderer.render(batch);
         handleMiddleClickMovement();
@@ -78,52 +150,54 @@ public class Editor extends InputAdapter implements Screen {
         double tileSize = Constants.TILE_SIZE * levelRenderer.getZoom();
         Point translatedLocation = getTranslatedMousePosition(tileSize);
 
+
         if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
 
-            if(isInBounds(translatedLocation)) {
 
                 if(getDistanceSinceLastClick(translatedLocation)>1 && oldTranslatedX!=-1)
                     addLinePoints(translatedLocation.x, translatedLocation.y, oldTranslatedX, oldTranslatedY);
                 else
                     tiles.add(new Point(translatedLocation.x, translatedLocation.y));
 
-                Cell[][] tmp = map.getCells();
 
                 switch(tool) {
                     case PENCIL:
-                        if(map.getCells()[translatedLocation.y][translatedLocation.x].getTile() != currentTile) {
+                        if(map.getCell(translatedLocation).getTile() != currentTile) {
                             while(!tiles.isEmpty()) {
                                 Point p = tiles.remove();
-                                tmp[p.y][p.x] = new Cell(currentTile, new Vector2(p.y, p.x));
-                                map.setCells(tmp);
+                                map.addCell(new Cell(currentTile, new Point(p.x, p.y)));
                             }
                         }
                         break;
                     case ERASER:
                         while(!tiles.isEmpty()) {
                             Point p = tiles.remove();
-                            tmp[p.y][p.x] = new Cell(Tile.AIR, new Vector2(p.y, p.x));
-                            map.setCells(tmp);
+                            map.addCell(new Cell(Tile.AIR, new Point(p.x, p.y)));
                         }
                         break;
                     case FILL:
-                        if(map.getCells()[translatedLocation.y][translatedLocation.x].getTile() != currentTile) {
-                            Tile tile = map.getCells()[translatedLocation.y][translatedLocation.x].getTile();
+                        if(map.getCell(translatedLocation).getTile() != currentTile) {
+                            Tile tile = map.getCell(translatedLocation).getTile();
                             filltmp = tile;
-                            map.setCells(floodQueueFill(map.getCells(), translatedLocation.x, translatedLocation.y, tile));
+
+                            map.setCellHash(floodQueueFill(map, translatedLocation.x, translatedLocation.y, tile));
                         }
                         break;
                 }
-            }
             oldTranslatedX = translatedLocation.x;
             oldTranslatedY = translatedLocation.y;
         } else
             oldTranslatedX = -1;
 
         batch.begin();
-        Sprite sprite = EdgeRecognizer.getSprite(map.getCells(), translatedLocation.x, translatedLocation.y, currentTile);
+        Sprite sprite = EdgeRecognizer.getSprite(currentTile, 0);
         float alpha = 0.5f;
-        batch.setColor(sprite.getColor().r, sprite.getColor().g, sprite.getColor().b, alpha);
+        batch.
+                setColor(
+                        sprite.getColor().r,
+                        sprite.getColor().g,
+                        sprite.getColor().b,
+                        alpha);
         batch.draw(sprite,
                 Math.round(translatedLocation.x*tileSize+levelRenderer.getMapLoc().getX()),
                 Math.round(translatedLocation.y*tileSize+levelRenderer.getMapLoc().getY()), (int)tileSize, (int)tileSize);
@@ -146,15 +220,15 @@ public class Editor extends InputAdapter implements Screen {
      * @param translatedLocation
      * @return boolean is in mapgrid
      */
-    private boolean isInBounds(Point translatedLocation) {
-        return Gdx.input.getY() <= Gdx.graphics.getHeight() &&
-                translatedLocation.y >= 0 &&
-                translatedLocation.y < map.getHeight() &&
-                translatedLocation.x >= 0 &&
-                translatedLocation.x < map.getWidth() &&
-                Gdx.input.getX() >= editorUIRenderer.getButtons().getWidth() + editorUIRenderer.getButtons().getX() + Gdx.graphics.getWidth() * 0.04f &&
-                Gdx.input.getY() <= Gdx.graphics.getHeight() - (editorUIRenderer.getChooser().getHeight() + editorUIRenderer.getChooser().getY() + Gdx.graphics.getWidth() * 0.04f);
-        }
+//    private boolean isInBounds(Point translatedLocation) {
+//        return Gdx.input.getY() <= Gdx.graphics.getHeight() &&
+//                translatedLocation.y >= 0 &&
+//                translatedLocation.y < map.getHeight() &&
+//                translatedLocation.x >= 0 &&
+//                translatedLocation.x < map.getWidth() &&
+//                Gdx.input.getX() >= editorUIRenderer.getButtons().getWidth() + editorUIRenderer.getButtons().getX() + Gdx.graphics.getWidth() * 0.04f &&
+//                Gdx.input.getY() <= Gdx.graphics.getHeight() - (editorUIRenderer.getChooser().getHeight() + editorUIRenderer.getChooser().getY() + Gdx.graphics.getWidth() * 0.04f);
+//    }
 
     /**
      * Translates the Mouse Location to the map grid
@@ -241,17 +315,17 @@ public class Editor extends InputAdapter implements Screen {
 
     @Override
     public boolean keyUp(int keycode) {
-        if(keycode == Input.Keys.Z) {
-            if(!changes.isEmpty()) {
-                List<Cell> tmp = changes.remove();
-                Cell[][] celltmp = map.getCells();
-                for(Cell cell : tmp) {
-                    celltmp[(int) cell.getLocation().y][(int) cell.getLocation().x] = cell;
-                }
-                map.setCells(celltmp);
-            }
-
-        }
+//        if(keycode == Input.Keys.Z) {
+//            if(!changes.isEmpty()) {
+//                List<Cell> tmp = changes.remove();
+//                Cell[][] celltmp = map.getCells();
+//                for(Cell cell : tmp) {
+//                    celltmp[(int) cell.getLocation().y][(int) cell.getLocation().x] = cell;
+//                }
+//                map.setCells(celltmp);
+//            }
+//
+//        }
         return false;
     }
 
@@ -307,7 +381,7 @@ public class Editor extends InputAdapter implements Screen {
     }
 
     /**
-     * Improved FloodFill function using queues
+     * NOT WORKING
      *
      * @param map
      * @param x
@@ -315,6 +389,7 @@ public class Editor extends InputAdapter implements Screen {
      * @param clickedTile
      * @return updated 2D Cellarray
      */
+    @Deprecated
     private Cell[][] floodQueueFill(Cell[][] map, int x, int y, final Tile clickedTile) {
         Queue<Point> queue = new LinkedList<Point>();
         if(map[y][x].getTile() != clickedTile)
@@ -331,16 +406,46 @@ public class Editor extends InputAdapter implements Screen {
                 iterations++;
                 c.add(map[p.y][p.x]);
 
-                map[p.y][p.x] = new Cell(currentTile, new Vector2(p.x, p.y));
-                if(p.x > 0) queue.add(new Point(p.x - 1, p.y));
-                if(p.x < this.map.getWidth() - 1) queue.add(new Point(p.x + 1, p.y));
-                if(p.y > 0) queue.add(new Point(p.x, p.y - 1));
-                if(p.y < this.map.getHeight() - 1) queue.add(new Point(p.x, p.y + 1));
+                //NOT WORKING ANY MORE
+//                map[p.y][p.x] = new Cell(currentTile, new Point(p.x, p.y));
+//                if(p.x > 0) queue.add(new Point(p.x - 1, p.y));
+//                if(p.x < this.map.getWidth() - 1) queue.add(new Point(p.x + 1, p.y));
+//                if(p.y > 0) queue.add(new Point(p.x, p.y - 1));
+//                if(p.y < this.map.getHeight() - 1) queue.add(new Point(p.x, p.y + 1));
 
             }
         }
         Gdx.app.log("Fill", "Blocks filled: " + iterations);
         return map;
+    }
+
+    private HashMap<Integer, Cell> floodQueueFill(WJMap map, int x, int y, final Tile clickedTile) {
+        Queue<Point> queue = new LinkedList<Point>();
+        if(map.getCell(x, y).getTile() != clickedTile)
+            return map.getCellHash();
+
+        queue.add(new Point(x, y));
+
+        int iterations = 0;
+        List<Cell> c = new ArrayList<Cell>();
+
+        while(!queue.isEmpty()) {
+            Point p = queue.remove();
+            if(map.getCell(p).getTile() == clickedTile && map.getCell(p).getTile() != currentTile) {
+                iterations++;
+                c.add(map.getCell(p));
+
+                map.addCell(new Cell(currentTile, new Point(p.x, p.y)));
+
+                if(p.x > 0) queue.add(new Point(p.x - 1, p.y));
+                if(p.x < Constants.MAXMAPSIZE - 1) queue.add(new Point(p.x + 1, p.y));
+                if(p.y > 0) queue.add(new Point(p.x, p.y - 1));
+                if(p.y < Constants.MAXMAPSIZE - 1) queue.add(new Point(p.x, p.y + 1));
+
+            }
+        }
+        Gdx.app.log("Fill", "Blocks filled: " + iterations);
+        return map.getCellHash();
     }
 
     /**

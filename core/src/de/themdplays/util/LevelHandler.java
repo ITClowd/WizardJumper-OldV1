@@ -2,6 +2,7 @@ package de.themdplays.util;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import de.themdplays.map.WJMap;
 import de.themdplays.map.WizardJumperMap;
 
 import java.util.ArrayList;
@@ -12,11 +13,11 @@ import java.util.List;
  */
 public class LevelHandler {
 
-    private List<WizardJumperMap> userMaps, storyMaps;
+    private List<WJMap> userMaps, storyMaps;
 
     public LevelHandler() {
-        userMaps = new ArrayList<WizardJumperMap>();
-        storyMaps = new ArrayList<WizardJumperMap>();
+        userMaps = new ArrayList<WJMap>();
+        storyMaps = new ArrayList<WJMap>();
         loadStoryLevels();
         loadUserMaps();
     }
@@ -28,7 +29,7 @@ public class LevelHandler {
         Gdx.app.log("INFO", "Loading Story Levels");
         for(FileHandle f : Gdx.files.local("levels").list()) {
             if(f.extension().equalsIgnoreCase("wjm")) {
-                storyMaps.add(new WizardJumperMap(f, f.nameWithoutExtension()));
+                storyMaps.add(new WJMap(f, f.nameWithoutExtension()));
                 Gdx.app.log("Loaded", f.nameWithoutExtension());
             }
         }
@@ -43,7 +44,7 @@ public class LevelHandler {
         Gdx.app.log("INFO", "Loading User Levels");
         for(FileHandle f : Gdx.files.local("maps").list()) {
             if(f.extension().equalsIgnoreCase("wjm")) {
-                userMaps.add(new WizardJumperMap(f, f.nameWithoutExtension()));
+                userMaps.add(new WJMap(f, f.nameWithoutExtension()));
                 Gdx.app.log("Loaded", f.nameWithoutExtension());
             }
         }
@@ -53,14 +54,14 @@ public class LevelHandler {
     /**
      * @return list of story maps
      */
-    public List<WizardJumperMap> getStoryMaps() {
+    public List<WJMap> getStoryMaps() {
         return storyMaps;
     }
 
     /**
      * @return list of user maps
      */
-    public List<WizardJumperMap> getUserMaps() {
+    public List<WJMap> getUserMaps() {
         return userMaps;
     }
 }

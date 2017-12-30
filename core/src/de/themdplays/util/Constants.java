@@ -16,6 +16,8 @@ public class Constants {
 
 	public static final int PIXELS_TO_METERS = TILE_SIZE; //equals 1 meter
 
+	public static final int MAXMAPSIZE = 200;
+
 	public static void recalcFontSizes() {
 		FONT_SIZE_BIG= Gdx.graphics.getHeight()/30;
 		FONT_SIZE_SMALL = Gdx.graphics.getHeight()/70;
