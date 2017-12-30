@@ -104,10 +104,10 @@ public class EditorUIRenderer implements Disposable {
      * Initializes the Buttons table and fills it with the tool icons
      */
     private void initButtons() {
-        eraser = new ToolButton(Assets.manager.get(Assets.editorAtlas).createSprite("Eraser"), EditorTools.ERASER);
-        fill = new ToolButton(Assets.manager.get(Assets.editorAtlas).createSprite("Fill"), EditorTools.FILL);
-        pencil = new ToolButton(Assets.manager.get(Assets.editorAtlas).createSprite("Pencil"), EditorTools.PENCIL);
-        save = new ToolButton(Assets.manager.get(Assets.editorAtlas).createSprite("Save"), EditorTools.SAVE);
+        eraser = new ToolButton(Assets.manager.get(Assets.editorAtlas).createSprite("eraser"), EditorTools.ERASER);
+        fill = new ToolButton(Assets.manager.get(Assets.editorAtlas).createSprite("fill"), EditorTools.FILL);
+        pencil = new ToolButton(Assets.manager.get(Assets.editorAtlas).createSprite("pencil"), EditorTools.PENCIL);
+        save = new ToolButton(Assets.manager.get(Assets.editorAtlas).createSprite("save"), EditorTools.SAVE);
 
         buttons.setWidth(eraser.getWidth());
 

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
@@ -61,77 +62,6 @@ public class Editor extends InputAdapter implements Screen {
         Gdx.input.setInputProcessor(new InputMultiplexer(this, editorUIRenderer.getStage()));
     }
 
-//    @Override
-//    public void render(float delta) {
-//        Gdx.gl.glClearColor(0, 0, 0, 1);
-//        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-//
-//        //WORLD RENDERER
-////        levelRenderer.render(null, map, false); //TO NOT CONVERT IT TO BOX2D
-//        //UI RENDERING
-//
-//        batch.begin();
-//        editorUIRenderer.render(batch);
-//        handleMiddleClickMovement();
-//        batch.end();
-//
-//        double tileSize = Constants.TILE_SIZE * levelRenderer.getZoom();
-//        Point translatedLocation = getTranslatedMousePosition(tileSize);
-//
-//        if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-//
-//            if(isInBounds(translatedLocation)) {
-//
-//                if(getDistanceSinceLastClick(translatedLocation)>1 && oldTranslatedX!=-1)
-//                    addLinePoints(translatedLocation.x, translatedLocation.y, oldTranslatedX, oldTranslatedY);
-//                else
-//                    tiles.add(new Point(translatedLocation.x, translatedLocation.y));
-//
-//                Cell[][] tmp = map.getCells();
-//
-//                switch(tool) {
-//                    case PENCIL:
-//                        if(map.getCells()[translatedLocation.y][translatedLocation.x].getTile() != currentTile) {
-//                            while(!tiles.isEmpty()) {
-//                                Point p = tiles.remove();
-//                                tmp[p.y][p.x] = new Cell(currentTile, new Vector2(p.y, p.x));
-//                                map.setCells(tmp);
-//                            }
-//                        }
-//                        break;
-//                    case ERASER:
-//                        while(!tiles.isEmpty()) {
-//                            Point p = tiles.remove();
-//                            tmp[p.y][p.x] = new Cell(Tile.AIR, new Vector2(p.y, p.x));
-//                            map.setCells(tmp);
-//                        }
-//                        break;
-//                    case FILL:
-//                        if(map.getCells()[translatedLocation.y][translatedLocation.x].getTile() != currentTile) {
-//                            Tile tile = map.getCells()[translatedLocation.y][translatedLocation.x].getTile();
-//                            filltmp = tile;
-//                            map.setCells(floodQueueFill(map.getCells(), translatedLocation.x, translatedLocation.y, tile));
-//                        }
-//                        break;
-//                }
-//            }
-//            oldTranslatedX = translatedLocation.x;
-//            oldTranslatedY = translatedLocation.y;
-//        } else
-//            oldTranslatedX = -1;
-//
-//        batch.begin();
-//        Sprite sprite = EdgeRecognizer.getSprite(map.getCells(), translatedLocation.x, translatedLocation.y, currentTile);
-//        float alpha = 0.5f;
-//        batch.setColor(sprite.getColor().r, sprite.getColor().g, sprite.getColor().b, alpha);
-//        batch.draw(sprite,
-//                Math.round(translatedLocation.x*tileSize+levelRenderer.getMapLoc().getX()),
-//                Math.round(translatedLocation.y*tileSize+levelRenderer.getMapLoc().getY()), (int)tileSize, (int)tileSize);
-//        batch.end();
-//
-//        ButtonHandler.backFunc(new MainMenu());
-//    }
-
 
     @Override
     public void render(float delta) {
@@ -150,11 +80,10 @@ public class Editor extends InputAdapter implements Screen {
         double tileSize = Constants.TILE_SIZE * levelRenderer.getZoom();
         Point translatedLocation = getTranslatedMousePosition(tileSize);
 
+        if(!isOverUI(translatedLocation)) {
+            if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
 
-        if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-
-
-                if(getDistanceSinceLastClick(translatedLocation)>1 && oldTranslatedX!=-1)
+                if(getDistanceSinceLastClick(translatedLocation) > 1 && oldTranslatedX != -1)
                     addLinePoints(translatedLocation.x, translatedLocation.y, oldTranslatedX, oldTranslatedY);
                 else
                     tiles.add(new Point(translatedLocation.x, translatedLocation.y));
@@ -184,24 +113,21 @@ public class Editor extends InputAdapter implements Screen {
                         }
                         break;
                 }
-            oldTranslatedX = translatedLocation.x;
-            oldTranslatedY = translatedLocation.y;
-        } else
-            oldTranslatedX = -1;
+                oldTranslatedX = translatedLocation.x;
+                oldTranslatedY = translatedLocation.y;
+            } else
+                oldTranslatedX = -1;
 
-        batch.begin();
-        Sprite sprite = EdgeRecognizer.getSprite(currentTile, 0);
-        float alpha = 0.5f;
-        batch.
-                setColor(
-                        sprite.getColor().r,
-                        sprite.getColor().g,
-                        sprite.getColor().b,
-                        alpha);
-        batch.draw(sprite,
-                Math.round(translatedLocation.x*tileSize+levelRenderer.getMapLoc().getX()),
-                Math.round(translatedLocation.y*tileSize+levelRenderer.getMapLoc().getY()), (int)tileSize, (int)tileSize);
-        batch.end();
+/*            batch.begin();
+            Sprite sprite = EdgeRecognizer.getSprite(currentTile, 0);
+            float alpha = 0.5f;
+            batch.setColor(sprite.getColor().r, sprite.getColor().g, sprite.getColor().b,alpha);
+            batch.draw(sprite,
+                    Math.round(translatedLocation.x * tileSize + levelRenderer.getMapLoc().getX()),
+                    Math.round(translatedLocation.y * tileSize + levelRenderer.getMapLoc().getY()), (int) tileSize, (int) tileSize);
+            batch.end();
+*/
+        }
 
         ButtonHandler.backFunc(new MainMenu());
     }
@@ -220,15 +146,10 @@ public class Editor extends InputAdapter implements Screen {
      * @param translatedLocation
      * @return boolean is in mapgrid
      */
-//    private boolean isInBounds(Point translatedLocation) {
-//        return Gdx.input.getY() <= Gdx.graphics.getHeight() &&
-//                translatedLocation.y >= 0 &&
-//                translatedLocation.y < map.getHeight() &&
-//                translatedLocation.x >= 0 &&
-//                translatedLocation.x < map.getWidth() &&
-//                Gdx.input.getX() >= editorUIRenderer.getButtons().getWidth() + editorUIRenderer.getButtons().getX() + Gdx.graphics.getWidth() * 0.04f &&
-//                Gdx.input.getY() <= Gdx.graphics.getHeight() - (editorUIRenderer.getChooser().getHeight() + editorUIRenderer.getChooser().getY() + Gdx.graphics.getWidth() * 0.04f);
-//    }
+    private boolean isOverUI(Point translatedLocation) {
+        return !(Gdx.input.getX() >= editorUIRenderer.getButtons().getWidth() + editorUIRenderer.getButtons().getX() + Gdx.graphics.getWidth() * 0.04f &&
+                Gdx.input.getY() <= Gdx.graphics.getHeight() - (editorUIRenderer.getChooser().getHeight() + editorUIRenderer.getChooser().getY() + Gdx.graphics.getWidth() * 0.04f));
+    }
 
     /**
      * Translates the Mouse Location to the map grid
@@ -236,8 +157,8 @@ public class Editor extends InputAdapter implements Screen {
      * @return Translated location as {@link Point}
      */
     private Point getTranslatedMousePosition(double tileSize) {
-        int translatedX = (int) ((Gdx.input.getX() - levelRenderer.getMapLoc().getX()) / tileSize);
-        int translatedY = (int) ((Gdx.graphics.getHeight() - Gdx.input.getY() - levelRenderer.getMapLoc().getY()) / tileSize);
+        int translatedX = MathUtils.floor((float)((Gdx.input.getX() - levelRenderer.getMapLoc().getX()) / tileSize));
+        int translatedY = MathUtils.floor((float)((Gdx.graphics.getHeight() - Gdx.input.getY() - levelRenderer.getMapLoc().getY()) / tileSize));
         return new Point(translatedX, translatedY);
     }
 

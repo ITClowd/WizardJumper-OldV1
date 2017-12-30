@@ -40,7 +40,7 @@ public class WJMap {
     }
 
     public void addCell(Cell c) {
-        int key = c.getLocation().x + (c.getLocation().y)*2;
+        int key = ( c.getLocation().y << 16 ) ^ c.getLocation().x;
         if(cellHash.containsKey(key))
             cellHash.replace(key, c);
         else cellHash.put(key, c);
@@ -48,8 +48,9 @@ public class WJMap {
     }
 
     public Cell getCell(Point p) {
-        if(cellHash.containsKey(p.x + (p.y)*2)) {
-            return cellHash.get(p.x + (p.y)*2);
+        int key = ( p.y << 16 ) ^ p.x;
+        if(cellHash.containsKey(key)) {
+            return cellHash.get(key);
         } else return new Cell(Tile.AIR, p);
     }
 
