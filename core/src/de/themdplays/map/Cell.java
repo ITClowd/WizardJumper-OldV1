@@ -19,6 +19,12 @@ public class Cell {
         this.location = location;
     }
 
+    public Cell(Tile tile, Point location, int tileVariation) {
+        this.tile = tile;
+        this.location = location;
+        this.tileVariation = tileVariation;
+    }
+
     /**
      * Returns the tile of the Cell
      * @return tile

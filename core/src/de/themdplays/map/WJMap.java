@@ -15,7 +15,7 @@ public class WJMap {
     private HashMap<Integer, Cell> cellHash;
 
     public WJMap() {
-        this.cellHash = new HashMap<Integer, Cell>();
+        this.cellHash = new HashMap<>();
     }
 
     public WJMap(FileHandle fileHandle, String name) {
@@ -24,23 +24,39 @@ public class WJMap {
     }
 
     public void save(String name) {
-        Json json = new Json();
-        json.setOutputType(JsonWriter.OutputType.json);
-        Gdx.files.local("maps/" + name + ".wjm").writeString(json.toJson(newMapDescriptor()), false);
+        String compressed = "";
+        for(Cell c: cellHash.values()) {
+            compressed += c.getTile().id + ";"
+                    + c.getTileVariation() + ";"
+                    + c.getLocation().x + ";"
+                    + c.getLocation().y + ",\n";
+        }
+        Gdx.files.local("maps/" + name + ".wjm").writeString(compressed, false);
     }
 
-    public void load(FileHandle fileHandle) {
-        //READ DATA
-        Json json = new Json();
-        MapDescriptor descriptor = json.fromJson(MapDescriptor.class, fileHandle);
+    private void load(FileHandle fileHandle) {
+        cellHash = new HashMap<>();
 
-        //APPLY PATCHES
-        cellHash = descriptor.cellHash;
-        name = descriptor.name;
+        String compressed = fileHandle.readString();
+        String[] cells = compressed.split(",\n");
+
+        for(String rawCellData : cells) {
+            String[] cellData = rawCellData.split(";");
+
+            Tile tile = Tile.getNameByCode(Integer.parseInt(cellData[0]));
+            int tileVariation = Integer.parseInt(cellData[1]);
+            Point location = new Point(Integer.parseInt(cellData[2]), Integer.parseInt(cellData[3]));
+
+            cellHash.put(getCellKey(location), new Cell(tile, location, tileVariation));
+        }
+    }
+
+    private int getCellKey(Point p) {
+        return ( p.y << 16 ) ^ p.x;
     }
 
     public void addCell(Cell c) {
-        int key = ( c.getLocation().y << 16 ) ^ c.getLocation().x;
+        int key = getCellKey(c.getLocation());
         if(cellHash.containsKey(key))
             cellHash.replace(key, c);
         else cellHash.put(key, c);
@@ -48,7 +64,7 @@ public class WJMap {
     }
 
     public void removeCell(Cell c) {
-        int key = ( c.getLocation().y << 16 ) ^ c.getLocation().x;
+        int key = getCellKey(c.getLocation());
         if(cellHash.containsKey(key))
             cellHash.remove(key);
     }
@@ -83,18 +99,4 @@ public class WJMap {
         this.cellHash = cellHash;
     }
 
-    public MapDescriptor newMapDescriptor() {
-        MapDescriptor m = new MapDescriptor();
-        m.cellHash = this.cellHash;
-        m.name = this.name;
-        return m;
-    }
-
-    /**
-     *  Class to save Map
-     */
-    public static class MapDescriptor {
-        String name;
-        HashMap<Integer, Cell> cellHash;
-    }
 }

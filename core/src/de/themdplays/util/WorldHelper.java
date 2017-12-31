@@ -1,6 +1,5 @@
 package de.themdplays.util;
 
-import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import de.themdplays.map.Cell;
@@ -14,31 +13,24 @@ import de.themdplays.screens.Play;
  */
 public class WorldHelper {
 
-    private WizardJumperMap map;
-    private WJMap wjmap;
+    private WizardJumperMap oldMap;
+    private WJMap map;
     private Body level;
 
     public WorldHelper(WJMap map) {
-        this.wjmap = map;
+        this.map = map;
         createBody();
         createMapBodiesNewSystem();
-    }
-
-    public WorldHelper(WizardJumperMap map) {
-        this.map = map;
-
-        createBody();
-        createMapBodies();
     }
 
     @Deprecated
     private void createMapBodiesOld() {
         PolygonShape shape = new PolygonShape();
 
-        for(int y = 0; y<map.getHeight(); y++) {
-            for(int x = 0; x<map.getWidth(); x++) {
-                if(map.getCells()[y][x] != null) {
-                    Tile tile = map.getCells()[y][x].getTile();
+        for(int y = 0; y< oldMap.getHeight(); y++) {
+            for(int x = 0; x< oldMap.getWidth(); x++) {
+                if(oldMap.getCells()[y][x] != null) {
+                    Tile tile = oldMap.getCells()[y][x].getTile();
                     if(tile != Tile.AIR) {
                         shape.setAsBox(.5f, .5f, new Vector2(x+.5f, y+.5f), 0);
                         level.createFixture(shape, 0);
@@ -53,7 +45,7 @@ public class WorldHelper {
     private void createMapBodiesNewSystem() {
         PolygonShape shape = new PolygonShape();
 
-        for(Cell c : wjmap.getCellHash().values()) {
+        for(Cell c : map.getCellHash().values()) {
             shape.setAsBox(.5f, .5f, new Vector2(c.getLocation().x+.5f, c.getLocation().y+.5f), 0);
             level.createFixture(shape, 0);
         }
@@ -62,11 +54,11 @@ public class WorldHelper {
 
     private void createMapBodies() {
         PolygonShape shape = new PolygonShape();
-        for(int y = 0; y<map.getHeight(); y++) {
+        for(int y = 0; y< oldMap.getHeight(); y++) {
             int oldX = -1, startX = -1;
-            for(int x = 0; x<map.getWidth(); x++) {
-                if(map.getCells()[y][x] != null) {
-                    Tile tile = map.getCells()[y][x].getTile();
+            for(int x = 0; x< oldMap.getWidth(); x++) {
+                if(oldMap.getCells()[y][x] != null) {
+                    Tile tile = oldMap.getCells()[y][x].getTile();
                     if(tile != Tile.AIR) {
                         oldX = x;
                     } else {
@@ -83,7 +75,6 @@ public class WorldHelper {
     }
 
     private void createBody() {
-
         //body def
         BodyDef bodyDef = new BodyDef();
         bodyDef.fixedRotation = true;
@@ -91,23 +82,13 @@ public class WorldHelper {
         //fixture def
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = 0;
-
-        //ground
-        bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(0,0);
-
-        //Ground shape
-        ChainShape groundShape = new ChainShape();
-        groundShape.createChain(new Vector2[]{new Vector2(0, map.getHeight()), new Vector2(0, 0), new Vector2(map.getWidth(), 0), new Vector2(map.getWidth(), map.getHeight()),new Vector2(0, map.getHeight())});
-
-        fixtureDef.shape = groundShape;
         fixtureDef.friction = 0;
         fixtureDef.restitution = 0;
 
-        level = Play.world.createBody(bodyDef);
-        level.createFixture(fixtureDef);
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(0,0);
 
-        groundShape.dispose();
+        level = Play.world.createBody(bodyDef);
     }
 
 }
