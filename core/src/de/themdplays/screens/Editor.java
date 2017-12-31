@@ -2,7 +2,9 @@ package de.themdplays.screens;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -42,14 +44,12 @@ public class Editor extends InputAdapter implements Screen {
     private Tile filltmp;
     private Queue<List<Cell>> changes = new LinkedList<List<Cell>>();
 
-    private Queue<Point> tiles = new LinkedList<Point>();
+    private static Queue<Point> tiles = new LinkedList<Point>();
 
     @Override
     public void show() {
         batch = new SpriteBatch();
-
         map = new WJMap();
-
         maplocation = new Location(0, 0);
 
         tool = EditorTools.PENCIL;
@@ -61,7 +61,6 @@ public class Editor extends InputAdapter implements Screen {
 
         Gdx.input.setInputProcessor(new InputMultiplexer(this, editorUIRenderer.getStage()));
     }
-
 
     @Override
     public void render(float delta) {
@@ -101,7 +100,7 @@ public class Editor extends InputAdapter implements Screen {
                     case ERASER:
                         while(!tiles.isEmpty()) {
                             Point p = tiles.remove();
-                            map.addCell(new Cell(Tile.AIR, new Point(p.x, p.y)));
+                            map.removeCell(map.getCell(p));
                         }
                         break;
                     case FILL:
@@ -118,7 +117,7 @@ public class Editor extends InputAdapter implements Screen {
             } else
                 oldTranslatedX = -1;
 
-/*            batch.begin();
+            batch.begin();
             Sprite sprite = EdgeRecognizer.getSprite(currentTile, 0);
             float alpha = 0.5f;
             batch.setColor(sprite.getColor().r, sprite.getColor().g, sprite.getColor().b,alpha);
@@ -126,7 +125,7 @@ public class Editor extends InputAdapter implements Screen {
                     Math.round(translatedLocation.x * tileSize + levelRenderer.getMapLoc().getX()),
                     Math.round(translatedLocation.y * tileSize + levelRenderer.getMapLoc().getY()), (int) tileSize, (int) tileSize);
             batch.end();
-*/
+
         }
 
         ButtonHandler.backFunc(new MainMenu());
@@ -276,6 +275,7 @@ public class Editor extends InputAdapter implements Screen {
     public static void setTool(EditorTools tool) {
         Editor.tool = tool;
         Gdx.app.log("INFO", "Current Tool " + tool.name());
+        tiles.clear();
     }
 
     /**

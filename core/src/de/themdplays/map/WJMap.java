@@ -47,6 +47,12 @@ public class WJMap {
 
     }
 
+    public void removeCell(Cell c) {
+        int key = ( c.getLocation().y << 16 ) ^ c.getLocation().x;
+        if(cellHash.containsKey(key))
+            cellHash.remove(key);
+    }
+
     public Cell getCell(Point p) {
         int key = ( p.y << 16 ) ^ p.x;
         if(cellHash.containsKey(key)) {
