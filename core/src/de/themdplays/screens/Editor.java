@@ -23,6 +23,7 @@ import de.themdplays.util.ui.EditorTools;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * Created by Moritz on 30.12.2016.
@@ -42,7 +43,7 @@ public class Editor extends InputAdapter implements Screen {
     private boolean down = false;
     private int middleX, middleY, oldTranslatedX, oldTranslatedY;
     private Tile filltmp;
-    private Queue<List<Cell>> changes = new LinkedList<List<Cell>>();
+    private Stack<List<Cell>> changes = new Stack<>();
 
     private static Queue<Point> tiles = new LinkedList<Point>();
 
@@ -91,17 +92,25 @@ public class Editor extends InputAdapter implements Screen {
                 switch(tool) {
                     case PENCIL:
                         if(map.getCell(translatedLocation).getTile() != currentTile) {
+                            List<Cell> tmpChanges = new ArrayList<Cell>();
                             while(!tiles.isEmpty()) {
                                 Point p = tiles.remove();
-                                map.addCell(new Cell(currentTile, new Point(p.x, p.y)));
+
+                                tmpChanges.add(map.getCell(p)); //for undo
+                                map.addCell(new Cell(currentTile, new Point(p.x, p.y))); //actual change
                             }
+                            changes.add(tmpChanges);
                         }
                         break;
                     case ERASER:
+                        List<Cell> tmpChanges = new ArrayList<Cell>();
                         while(!tiles.isEmpty()) {
                             Point p = tiles.remove();
-                            map.removeCell(map.getCell(p));
+
+                            tmpChanges.add(map.getCell(p)); //for UNDO
+                            map.removeCell(map.getCell(p)); //actual change
                         }
+                        changes.add(tmpChanges);
                         break;
                     case FILL:
                         if(map.getCell(translatedLocation).getTile() != currentTile) {
@@ -233,19 +242,24 @@ public class Editor extends InputAdapter implements Screen {
         }
     }
 
+    /**
+     * Undo's the last change
+     */
+    private void undo() {
+        if(!changes.isEmpty()) {
+            List<Cell> c = changes.pop();
+
+            for(Cell old: c) {
+                map.addCell(old);
+            }
+        }
+    }
+
     @Override
     public boolean keyUp(int keycode) {
-//        if(keycode == Input.Keys.Z) {
-//            if(!changes.isEmpty()) {
-//                List<Cell> tmp = changes.remove();
-//                Cell[][] celltmp = map.getCells();
-//                for(Cell cell : tmp) {
-//                    celltmp[(int) cell.getLocation().y][(int) cell.getLocation().x] = cell;
-//                }
-//                map.setCells(celltmp);
-//            }
-//
-//        }
+        if(keycode == Input.Keys.Z) {
+            undo();
+        }
         return false;
     }
 
@@ -341,6 +355,8 @@ public class Editor extends InputAdapter implements Screen {
     }
 
     private HashMap<Integer, Cell> floodQueueFill(WJMap map, int x, int y, final Tile clickedTile) {
+        List<Cell> tmpChanges = new ArrayList<Cell>();
+
         Queue<Point> queue = new LinkedList<Point>();
         if(map.getCell(x, y).getTile() != clickedTile)
             return map.getCellHash();
@@ -356,6 +372,7 @@ public class Editor extends InputAdapter implements Screen {
                 iterations++;
                 c.add(map.getCell(p));
 
+                tmpChanges.add(map.getCell(p));
                 map.addCell(new Cell(currentTile, new Point(p.x, p.y)));
 
                 if(p.x > 0) queue.add(new Point(p.x - 1, p.y));
@@ -365,6 +382,7 @@ public class Editor extends InputAdapter implements Screen {
 
             }
         }
+        changes.add(tmpChanges);
         Gdx.app.log("Fill", "Blocks filled: " + iterations);
         return map.getCellHash();
     }
